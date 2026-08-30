@@ -177,204 +177,183 @@
 <!-- VALIDATION SCREEN -->
 <!-- ===================================== -->
 
-<section
-    id="validationSection"
-    class="hidden">
+<section id="validationSection" class="hidden">
 
-    <div class="workspace">
+<div class="workspace">
 
-        <!-- PDF PANEL -->
+    <!-- ================= PDF ================= -->
 
-        <div class="pdf-panel">
+    <div class="pdf-panel">
 
-            <div class="viewer-toolbar">
+        <div class="viewer-toolbar">
 
-                <button
-                    id="prevPageBtn">
+            <button id="prevPageBtn">Previous</button>
 
-                    Previous
+            <div>
 
-                </button>
+                <button id="zoomOutBtn">−</button>
 
-<div>
+                <button id="zoomResetBtn">100%</button>
 
-    <button id="zoomOutBtn">−</button>
-
-    <button id="zoomResetBtn">
-        100%
-    </button>
-
-    <button id="zoomInBtn">+</button>
-
-</div>
-
-                
-                <span>
-
-                    Page
-
-                    <span id="currentPage">
-
-                        1
-
-                    </span>
-
-                    /
-
-                    <span id="totalPages">
-
-                        0
-
-                    </span>
-
-                </span>
-
-                <button
-                    id="nextPageBtn">
-
-                    Next
-
-                </button>
+                <button id="zoomInBtn">+</button>
 
             </div>
 
-            <div class="pdf-scroll-container">
+            <span>
 
-    <canvas id="pdfCanvas"></canvas>
+                Page
 
-</div>
+                <span id="currentPage">1</span>
 
-            <div class="upload-area">
+                /
 
-                <label>
-                    Upload GFC PDF file (as per the GFC request ID)
-                </label>
+                <span id="totalPages">0</span>
 
-                <input
-                    type="file"
-                    id="gfcPdfInput"
-                    accept=".pdf">
+            </span>
 
-            </div>
+            <button id="nextPageBtn">Next</button>
 
         </div>
 
-        <!-- VALIDATION PANEL -->
+        <div class="pdf-scroll-container">
 
- <div class="validation-workspace">
+            <canvas id="pdfCanvas"></canvas>
 
-    <!-- ================= TOP ================= -->
+        </div>
 
-    <div class="top-workspace">
+        <div class="upload-area">
 
-        <!-- SKU PANEL -->
-
-        <div class="sku-panel">
-
-            <h2>SKU Search & Selection</h2>
-
-            <label>Select Room</label>
-
-            <select id="roomDropdown"></select>
-
-            <label>Search Items</label>
+            <label>Upload GFC PDF</label>
 
             <input
-                type="text"
-                id="itemSearch"
-                placeholder="Search SKU, Room, Qty...">
-
-            <label>Visible Items</label>
-
-            <select
-                id="itemDropdown"
-                multiple>
-            </select>
-
-            <h3>Selected SKUs</h3>
-
-            <div
-                id="selectedSkuContainer"
-                class="selected-sku-container">
-            </div>
-
-            <button
-                id="addToQtyBtn"
-                type="button">
-                Add to Qty Validation
-            </button>
-
-            <hr style="margin:20px 0;">
-
-            <h3>Extra Items visible in GFC but not RFV</h3>
-
-            <div id="extraItemsContainer"></div>
-
-            <button
-                id="addExtraItemBtn"
-                type="button">
-                Add More
-            </button>
-
-        </div>
-
-        <!-- QTY PANEL -->
-
-        <div class="qty-panel">
-
-            <h2>BOQ vs GFC Quantity Validation</h2>
-
-            <div id="qtyValidationContainer">
-
-                <p>No items added.</p>
-
-            </div>
+                type="file"
+                id="gfcPdfInput"
+                accept=".pdf">
 
         </div>
 
     </div>
 
-    <!-- ================= CATEGORY ================= -->
+    <!-- ================= RIGHT PANEL ================= -->
 
-    <div class="category-panel">
+    <div class="validation-workspace">
 
-        <h2>Category Validation</h2>
+        <!-- ================= VALIDATION QUEUE ================= -->
 
-        <label>Search Category</label>
+        <div class="queue-panel">
 
-        <input
-            type="text"
-            id="categorySearch"
-            placeholder="Search category...">
+            <h2>Validation Queue</h2>
 
-        <label>
-            Drawing Category (Select all categories visible in the page)
-        </label>
+            <div id="validationQueue">
 
-        <div>
+                Queue will appear here...
 
-            <label>Selected Categories</label>
-
-            <div id="selectedCategoryContainer"></div>
+            </div>
 
         </div>
 
-        <select
-            id="categoryDropdown"
-            multiple>
-        </select>
+        <!-- ================= CURRENT SKU ================= -->
 
-        <div id="checklistContainer"></div>
+        <div class="current-panel">
 
-        <label>Overall Remarks</label>
+            <h2>Current Validation</h2>
 
-        <textarea id="overallRemarks"></textarea>
+            <table class="current-sku-table">
 
-        <button id="saveValidationBtn">
+                <tr>
 
-            Save Page Validation
+                    <td><b>Room</b></td>
 
-        </button>
+                    <td id="currentRoom">-</td>
+
+                </tr>
+
+                <tr>
+
+                    <td><b>SKU</b></td>
+
+                    <td id="currentSKU">-</td>
+
+                </tr>
+
+                <tr>
+
+                    <td><b>BOQ Qty</b></td>
+
+                    <td id="currentQty">-</td>
+
+                </tr>
+
+                <tr>
+
+                    <td><b>Price</b></td>
+
+                    <td id="currentPrice">-</td>
+
+                </tr>
+
+            </table>
+
+            <hr>
+
+            <label>Drawing Page</label>
+
+            <input
+                type="number"
+                id="drawingPage">
+
+            <label>Visible Qty in GFC</label>
+
+            <input
+                type="number"
+                id="gfcQty">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="drawingFound"
+                    checked>
+
+                Drawing Found
+
+            </label>
+
+        </div>
+
+        <!-- ================= CATEGORY ================= -->
+
+        <div class="category-panel">
+
+            <h2>Category Validation</h2>
+
+            <input
+                id="categorySearch"
+                placeholder="Search Category">
+
+            <div id="selectedCategoryContainer"></div>
+
+            <select
+                id="categoryDropdown"
+                multiple>
+
+            </select>
+
+            <div id="checklistContainer"></div>
+
+            <textarea
+                id="overallRemarks"
+                placeholder="Overall Remarks">
+
+            </textarea>
+
+            <button id="saveValidationBtn">
+
+                Save & Next SKU
+
+            </button>
+
+        </div>
 
     </div>
 

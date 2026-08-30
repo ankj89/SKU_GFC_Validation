@@ -382,15 +382,4 @@ function getValidationStore() {
 
 }
 
-// =====================================
-// SAVE BUTTON
-// =====================================
 
-document
-.getElementById(
-    "saveValidationBtn"
-)
-?.addEventListener(
-    "click",
-    () => saveCurrentPageValidation(true)
-);

@@ -16,10 +16,7 @@ const categoryDropdown =
         "categoryDropdown"
     );
 
-const itemDropdown =
-    document.getElementById(
-        "itemDropdown"
-    );
+
 
 // =========================================
 // CATEGORY DROPDOWN
@@ -62,15 +59,7 @@ function populateCategoryDropdown() {
 
 }
 
-// =========================================
-// CATEGORY CHANGE
-// =========================================
 
-categoryDropdown
-?.addEventListener(
-    "change",
-    generateChecklist
-);
 
 // =========================================
 // GENERATE CHECKLIST
@@ -82,59 +71,53 @@ if (!checklistContainer) {
     return;
 }
 
-const existingBlocks =
-    Array.from(
-        checklistContainer.querySelectorAll(
-            ".category-block"
-        )
-    ).map(
-        block =>
-            block.dataset.category
-    );
+checklistContainer.innerHTML = "";
 
-selectedCategoryBasket.forEach(
-    category => {
+selectedCategoryBasket.forEach(category => {
 
-        if (
-            existingBlocks.includes(
-                category
-            )
-        ) {
-            return;
-        }
+    const block =
+        createCategoryBlock(category);
 
-        const block =
-            createCategoryBlock(
-                category
-            );
-
-        checklistContainer.appendChild(
-            block
-        );
-
-    }
-);
-
-document
-.querySelectorAll(
-    ".category-block"
-)
-.forEach(block => {
-
-    const category =
-        block.dataset.category;
-
-    if (
-        !selectedCategoryBasket.includes(
-            category
-        )
-    ) {
-
-        block.remove();
-
-    }
+    checklistContainer.appendChild(block);
 
 });
+
+
+
+}
+
+function populateChecklist(savedChecklist){
+
+    if(!savedChecklist) return;
+
+    savedChecklist.forEach(saved=>{
+
+        document
+        .querySelectorAll(".checklist-item")
+        .forEach(item=>{
+
+            const title =
+                item.querySelector(".checklist-title").textContent;
+
+            if(title!==saved.title) return;
+
+            const radio =
+                item.querySelector(
+                    `input[value="${saved.status}"]`
+                );
+
+            if(radio){
+
+                radio.checked=true;
+
+            }
+
+            item.querySelector(".item-remark").value =
+                saved.remark || "";
+
+        });
+
+    });
 
 }
 

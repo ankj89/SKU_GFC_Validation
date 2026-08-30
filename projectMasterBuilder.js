@@ -203,6 +203,44 @@ rooms[
 ] =
     fullHomeItems;
 
+    const validationQueue = [];
+
+Object.keys(rooms).forEach(room => {
+
+    if (room === "FULL HOME") return;
+
+    rooms[room].forEach(item => {
+
+        validationQueue.push({
+
+            id: validationQueue.length + 1,
+
+            room: item.room,
+
+            item: item.item,
+
+            qty: item.qty,
+
+            price: item.price,
+
+            category: item.category,
+
+            drawingPage: null,
+
+            gfcQty: null,
+
+            checklist: [],
+
+            remarks: "",
+
+            status: "Pending"
+
+        });
+
+    });
+
+});
+
 projectMaster = {
 
     sourceType:
@@ -224,8 +262,9 @@ projectMaster = {
     pid:
         masterPID,
 
-    rooms
-
+    rooms,
+validationQueue
+    
 };
 
 console.log(

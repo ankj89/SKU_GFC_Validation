@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        GFC Validation Tool V4.1
+    </title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        GFC Validation Tool V4.1
+    </h1>
+
+</header>
+
+<!-- ===================================== -->
+<!-- PROJECT SETUP -->
+<!-- ===================================== -->
+
+<section class="setup-section">
+
+    <div class="card">
+
+        <h2>
+            Project Setup
+        </h2>
+
+        <label>
+          Enter GFC request ID to be validated
+        </label>
+
+        <input
+            type="text"
+            id="gfcIdInput">
+
+  <h3>Upload converted RFV Excel file</h3>
+
+<div style="margin-bottom:10px;">
+
+    <a
+        href="https://docs.google.com/spreadsheets/d/1Iy3SJ4UCKmGczNkNazTO_9oj26Z1oQGs8spxFbWwD-E/edit"
+        target="_blank"
+    >
+        📥 Click here to get RFV excel file
+    </a>
+
+</div>
+
+<input
+    type="file"
+    id="rfvExcelInput"
+    accept=".xlsx,.xls,.csv">
+
+<hr>
+
+<h3>OR Upload converted BOQ PDF file</h3>
+
+<input
+    type="file"
+    id="boqPdfInput"
+    accept=".pdf">
+
+       
+
+</section>
+
+<!-- ===================================== -->
+<!-- BOQ REVIEW -->
+<!-- ===================================== -->
+
+<section
+    id="boqReviewSection"
+    class="card hidden">
+
+    <h2>
+        BOQ Review (All items to be present)
+    </h2>
+<div class="boq-review-layout">
+
+<div class="boq-table">
+
+    
+   <table>
+
+<thead>
+
+<tr>
+
+<th>RFV ID</th>
+
+<th>Order ID</th>
+
+<th>PID</th>
+
+<th>Room</th>
+
+<th>Qty</th>
+    <th>Price</th>
+
+<th>SKU Name</th>
+
+<th>Category</th>
+
+<th>Select</th>
+
+</tr>
+
+</thead>
+
+<tbody id="boqReviewBody">
+
+</tbody>
+
+</table>
+    
+<div
+    id="importSummary"
+    class="import-summary">
+</div>
+
+</div>
+
+<div
+    id="parserSummary"
+    class="parser-summary">
+
+</div>
+
+</div>
+
+<div class="button-row">
+
+        <button
+            id="addRowBtn">
+
+            Add Row
+
+        </button>
+
+        <button
+            id="deleteRowBtn">
+
+            Delete Selected Row
+
+        </button>
+
+        <button
+            id="saveProjectMasterBtn">
+
+            Save Project Master
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- VALIDATION SCREEN -->
+<!-- ===================================== -->
+
+<section
+    id="validationSection"
+    class="hidden">
+
+    <div class="workspace">
+
+        <!-- PDF PANEL -->
+
+        <div class="pdf-panel">
+
+            <div class="viewer-toolbar">
+
+                <button
+                    id="prevPageBtn">
+
+                    Previous
+
+                </button>
+
+<div>
+
+    <button id="zoomOutBtn">−</button>
+
+    <button id="zoomResetBtn">
+        100%
+    </button>
+
+    <button id="zoomInBtn">+</button>
+
+</div>
+
+                
+                <span>
+
+                    Page
+
+                    <span id="currentPage">
+
+                        1
+
+                    </span>
+
+                    /
+
+                    <span id="totalPages">
+
+                        0
+
+                    </span>
+
+                </span>
+
+                <button
+                    id="nextPageBtn">
+
+                    Next
+
+                </button>
+
+            </div>
+
+            <div class="pdf-scroll-container">
+
+    <canvas id="pdfCanvas"></canvas>
+
+</div>
+
+            <div class="upload-area">
+
+                <label>
+                    Upload GFC PDF file (as per the GFC request ID)
+                </label>
+
+                <input
+                    type="file"
+                    id="gfcPdfInput"
+                    accept=".pdf">
+
+            </div>
+
+        </div>
+
+        <!-- VALIDATION PANEL -->
+
+ <div class="validation-workspace">
+
+    <!-- ================= TOP ================= -->
+
+    <div class="top-workspace">
+
+        <!-- SKU PANEL -->
+
+        <div class="sku-panel">
+
+            <h2>SKU Search & Selection</h2>
+
+            <label>Select Room</label>
+
+            <select id="roomDropdown"></select>
+
+            <label>Search Items</label>
+
+            <input
+                type="text"
+                id="itemSearch"
+                placeholder="Search SKU, Room, Qty...">
+
+            <label>Visible Items</label>
+
+            <select
+                id="itemDropdown"
+                multiple>
+            </select>
+
+            <h3>Selected SKUs</h3>
+
+            <div
+                id="selectedSkuContainer"
+                class="selected-sku-container">
+            </div>
+
+            <button
+                id="addToQtyBtn"
+                type="button">
+                Add to Qty Validation
+            </button>
+
+            <hr style="margin:20px 0;">
+
+            <h3>Extra Items visible in GFC but not RFV</h3>
+
+            <div id="extraItemsContainer"></div>
+
+            <button
+                id="addExtraItemBtn"
+                type="button">
+                Add More
+            </button>
+
+        </div>
+
+        <!-- QTY PANEL -->
+
+        <div class="qty-panel">
+
+            <h2>BOQ vs GFC Quantity Validation</h2>
+
+            <div id="qtyValidationContainer">
+
+                <p>No items added.</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= CATEGORY ================= -->
+
+    <div class="category-panel">
+
+        <h2>Category Validation</h2>
+
+        <label>Search Category</label>
+
+        <input
+            type="text"
+            id="categorySearch"
+            placeholder="Search category...">
+
+        <label>
+            Drawing Category (Select all categories visible in the page)
+        </label>
+
+        <div>
+
+            <label>Selected Categories</label>
+
+            <div id="selectedCategoryContainer"></div>
+
+        </div>
+
+        <select
+            id="categoryDropdown"
+            multiple>
+        </select>
+
+        <div id="checklistContainer"></div>
+
+        <label>Overall Remarks</label>
+
+        <textarea id="overallRemarks"></textarea>
+
+        <button id="saveValidationBtn">
+
+            Save Page Validation
+
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- ===================================== -->
+<!-- REPORTS -->
+<!-- ===================================== -->
+
+<section
+    class="report-section">
+
+    <h2>
+        Reports
+    </h2>
+
+    <button
+        id="generateReportBtn">
+
+        Generate Reports
+
+    </button>
+
+    <button
+        id="exportExcelBtn">
+
+        Export Excel
+
+    </button>
+
+    <div
+        id="reportContainer">
+
+    </div>
+
+</section>
+
+<script src="config/checklistConfig.js"></script>
+<script src="js/boqPdfImporter.js"></script>
+<script src="js/projectFetcher.js"></script>
+<script src="js/projectMasterBuilder.js"></script>
+
+<script src="js/pdfViewer.js"></script>
+
+<script src="js/checklistEngine.js"></script>
+
+<script src="js/validationStore.js"></script>
+
+<script src="js/reportGenerator.js"></script>
+
+<script src="js/excelExport.js"></script>
+
+<script src="js/app.js"></script>
+
+</body>
+
+</html>

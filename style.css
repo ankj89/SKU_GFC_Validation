@@ -1,0 +1,969 @@
+/* =====================================
+   GLOBAL
+===================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f5f7fa;
+    color:#333;
+}
+
+.hidden{
+    display:none;
+}
+
+header{
+    background:#1f4e79;
+    color:white;
+    padding:18px 24px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+
+header h1{
+    font-size:24px;
+}
+
+/* =====================================
+   COMMON CARD
+===================================== */
+
+.card{
+
+    background:white;
+
+    margin:20px;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.card h2{
+    margin-bottom:15px;
+}
+
+/* =====================================
+   PROJECT SETUP
+===================================== */
+
+.setup-section{
+
+    margin-top:10px;
+
+}
+
+.setup-section label{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.setup-section input{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+#fetchProjectBtn{
+
+    margin-top:15px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+#fetchProjectBtn:hover{
+
+    background:#163a5c;
+
+}
+
+/* =====================================
+   BOQ REVIEW
+===================================== */
+
+.review-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+}
+
+.review-table th{
+
+    background:#1f4e79;
+
+    color:white;
+
+    padding:10px;
+
+    text-align:left;
+
+}
+
+.review-table td{
+
+    border:1px solid #ddd;
+
+    padding:8px;
+
+}
+
+.review-table input{
+
+    width:100%;
+
+    padding:8px;
+
+    border:1px solid #ccc;
+
+    border-radius:4px;
+
+}
+
+.review-table select{
+
+    width:100%;
+
+    padding:8px;
+
+}
+
+.button-row{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.button-row button{
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.button-row button:hover{
+
+    background:#163a5c;
+
+}
+
+/* =====================================
+   MAIN LAYOUT
+===================================== */
+
+.workspace{
+
+    display:grid;
+
+    grid-template-columns:50% 50%;
+
+    gap:20px;
+
+    align-items:stretch;
+
+}
+
+/* =====================================
+   PDF PANEL
+===================================== */
+.pdf-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    position:sticky;
+
+    top:15px;
+
+    height:calc(100vh - 30px);
+
+    overflow:hidden;
+
+}
+
+.pdf-scroll-container{
+
+    flex:1;
+
+    overflow:auto;
+
+    border:1px solid #ddd;
+
+}
+
+.viewer-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+}
+
+.viewer-toolbar button{
+
+    padding:10px 14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.viewer-toolbar button:hover{
+
+    background:#163a5c;
+
+}
+
+#pdfCanvas{
+
+    display:block;
+
+    border:1px solid #ddd;
+
+    max-width:none;
+
+}
+
+.upload-area{
+
+    margin-top:15px;
+
+}
+
+.upload-area label{
+
+    display:block;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+/* =====================================
+   VALIDATION WORKSPACE
+===================================== */
+
+.validation-workspace{
+
+    display:grid;
+
+    grid-template-rows:40% 60%;
+
+    gap:20px;
+
+    height:calc(100vh - 30px);
+
+    min-height:0;
+
+}
+
+/* ---------- CATEGORY PANEL ---------- */
+
+.category-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+
+
+    overflow-y:auto;
+
+}
+.category-panel{
+
+    height:100%;
+
+}
+
+.category-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+.category-panel label{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.category-panel input,
+.category-panel textarea,
+.category-panel select{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+.category-panel textarea{
+
+    min-height:80px;
+
+    resize:vertical;
+
+}
+
+/* ---------- BOTTOM ROW ---------- */
+
+.top-workspace{
+
+    display:grid;
+
+    grid-template-columns:40% 60%;
+
+    gap:20px;
+
+    min-height:0;
+
+}
+
+/* ---------- SKU PANEL ---------- */
+
+.sku-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+   min-height:0;
+
+}
+
+.sku-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+.sku-panel label{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.sku-panel input,
+.sku-panel textarea,
+.sku-panel select{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+/* ---------- QTY PANEL ---------- */
+
+.qty-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+    min-height:0;
+
+}
+
+.qty-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+
+.sku-panel,
+.qty-panel{
+
+    height:100%;
+
+}
+
+#roomDropdown{
+
+    height:40px;
+
+}
+
+#itemDropdown{
+
+    height:180px;
+
+}
+
+#categoryDropdown{
+
+    height:150px;
+
+}
+
+
+
+.selected-sku-container {
+
+    border: 1px solid #ccc;
+
+    min-height: 50px;
+
+    padding: 8px;
+
+    margin-bottom: 15px;
+
+    background: #fff;
+
+}
+
+.selected-sku {
+
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    margin: 4px;
+
+    background: #1f4e79;
+
+    color: white;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+}
+/* =====================================
+   EXTRA ITEMS
+===================================== */
+
+#extraItemsContainer{
+
+    margin-top:10px;
+
+}
+
+.extra-item-row{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:10px;
+
+}
+
+.extra-item-row input{
+
+    flex:1;
+
+}
+
+.extra-item-row button{
+
+    width:40px;
+
+}
+
+#addExtraItemBtn{
+
+    margin-top:10px;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+/* =====================================
+   DRAWING STATUS
+===================================== */
+
+.drawing-status{
+
+    margin-top:15px;
+
+    padding:12px;
+
+    background:#f7f8fa;
+
+    border:1px solid #ddd;
+
+    border-radius:6px;
+
+}
+
+/* =====================================
+   CHECKLIST
+===================================== */
+
+#checklistContainer{
+
+    margin-top:20px;
+
+}
+
+.category-block{
+
+    margin-bottom:20px;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    overflow:hidden;
+
+}
+
+.category-header{
+
+    background:#1f4e79;
+
+    color:white;
+
+    padding:10px;
+
+    font-weight:bold;
+
+}
+
+.checklist-item{
+
+    padding:12px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.checklist-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.checklist-title{
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+.status-group{
+
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:8px;
+
+}
+
+.status-group label{
+
+    margin:0;
+
+    font-weight:normal;
+
+}
+
+.item-remark{
+
+    width:100%;
+
+    min-height:50px;
+
+}
+
+/* =====================================
+   SAVE BUTTON
+===================================== */
+
+#saveValidationBtn{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+#saveValidationBtn:hover{
+
+    background:#163a5c;
+
+}
+
+/* =====================================
+   REPORTS
+===================================== */
+
+.report-section{
+
+    background:white;
+
+    margin:20px;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,0.08);
+
+}
+
+.report-section h2{
+
+    margin-bottom:15px;
+
+}
+
+#generateReportBtn,
+#exportExcelBtn{
+
+    padding:12px 18px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+    margin-right:10px;
+
+}
+
+#generateReportBtn:hover,
+#exportExcelBtn:hover{
+
+    background:#163a5c;
+
+}
+
+#reportContainer{
+
+    margin-top:20px;
+
+}
+
+.report-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.report-table th{
+
+    background:#1f4e79;
+
+    color:white;
+
+}
+
+.report-table th,
+.report-table td{
+
+    border:1px solid #ccc;
+
+    padding:8px;
+
+    text-align:left;
+
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:1200px){
+
+   .workspace{
+
+    grid-template-columns:1fr;
+
+}
+
+    .pdf-panel{
+
+        width:100%;
+
+    }
+
+   .validation-workspace{
+
+    height:auto;
+
+}
+   .bottom-workspace{
+
+    grid-template-columns:1fr;
+
+}
+
+    .button-row{
+
+        flex-direction:column;
+
+    }
+
+}
+.import-summary{
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:1px solid #ccc;
+
+    background:#f8f9fa;
+
+    border-radius:6px;
+
+    line-height:1.8;
+
+}
+#addToQtyBtn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#1f4e79;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+#addToQtyBtn:hover{
+
+    background:#163a5c;
+
+}
+
+#qtyValidationContainer{
+
+    min-height:250px;
+
+    border:1px dashed #ccc;
+
+    border-radius:6px;
+
+    padding:15px;
+
+    color:#777;
+
+}
+.qty-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.qty-table th{
+
+    background:#1f4e79;
+
+    color:white;
+
+    padding:8px;
+
+    font-size:13px;
+
+}
+
+.qty-table td{
+
+    border:1px solid #ddd;
+
+    padding:8px;
+
+    font-size:13px;
+
+}
+
+.qty-table input{
+
+    width:70px;
+
+    padding:6px;
+
+}
+
+.delete-qty-btn{
+
+    border:none;
+
+    background:none;
+
+    color:#d32f2f;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+.qty-room-group{
+
+    margin-bottom:20px;
+
+}
+
+.qty-room-header{
+
+    background:#f5f5f5;
+
+    font-weight:600;
+
+    font-size:15px;
+
+    padding:8px 12px;
+
+    border:1px solid #ddd;
+
+    border-bottom:none;
+
+    border-radius:6px 6px 0 0;
+
+}
+
+.qty-room-group .qty-table{
+
+    margin-top:0;
+
+    border-radius:0 0 6px 6px;
+
+}

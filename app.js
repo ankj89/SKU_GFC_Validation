@@ -934,3 +934,208 @@ document
     saveAndNext
 
 );
+
+// =====================================
+// APP.JS - PART 4
+// HELPERS + PROGRESS + RESET
+// =====================================
+
+
+// =====================================
+// CLEAR CURRENT VALIDATION
+// =====================================
+
+function clearValidationForm(){
+
+    selectedCategoryBasket=[];
+
+    renderSelectedCategories();
+
+    generateChecklist();
+
+    document.getElementById(
+        "overallRemarks"
+    ).value="";
+
+    document.getElementById(
+        "drawingPage"
+    ).value="";
+
+    document.getElementById(
+        "gfcQty"
+    ).value="";
+
+    document.getElementById(
+        "drawingFound"
+    ).checked=true;
+
+}
+
+
+// =====================================
+// GO TO FIRST PENDING SKU
+// =====================================
+
+function goToFirstPending(){
+
+    const index =
+
+        validationQueue.findIndex(
+
+            sku=>sku.status!=="Completed"
+
+        );
+
+    if(index>=0){
+
+        loadQueueItem(index);
+
+    }
+
+}
+
+
+// =====================================
+// VALIDATION SUMMARY
+// =====================================
+
+function refreshProgress(){
+
+    const completed =
+
+        validationQueue.filter(
+
+            x=>x.status==="Completed"
+
+        ).length;
+
+    const total =
+        validationQueue.length;
+
+    console.log(
+
+        `Progress : ${completed}/${total}`
+
+    );
+
+    updateWindowTitle();
+
+}
+
+
+// =====================================
+// OVERRIDE SAVE
+// =====================================
+
+const originalSaveAndNext =
+    saveAndNext;
+
+saveAndNext=function(){
+
+    originalSaveAndNext();
+
+    refreshProgress();
+
+};
+
+
+// =====================================
+// AUTO SCROLL ACTIVE ITEM
+// =====================================
+
+const oldHighlightQueueItem =
+    highlightQueueItem;
+
+highlightQueueItem=function(){
+
+    oldHighlightQueueItem();
+
+    const active =
+
+        document.querySelector(
+            ".queue-item.active"
+        );
+
+    if(active){
+
+        active.scrollIntoView({
+
+            behavior:"smooth",
+
+            block:"nearest"
+
+        });
+
+    }
+
+};
+
+
+// =====================================
+// PROJECT START
+// =====================================
+
+const oldInitializeValidationQueue =
+    initializeValidationQueue;
+
+initializeValidationQueue=function(){
+
+    oldInitializeValidationQueue();
+
+    refreshProgress();
+
+};
+
+
+// =====================================
+// VALIDATION COMPLETE
+// =====================================
+
+function isValidationComplete(){
+
+    return validationQueue.every(
+
+        sku=>sku.status==="Completed"
+
+    );
+
+}
+
+
+// =====================================
+// FINISH MESSAGE
+// =====================================
+
+function checkCompletion(){
+
+    if(
+
+        isValidationComplete()
+
+    ){
+
+        alert(
+
+            "Project Validation Completed."
+
+        );
+
+    }
+
+}
+
+
+// =====================================
+// OVERRIDE SAVE AGAIN
+// =====================================
+
+const oldSave =
+    saveCurrentValidation;
+
+saveCurrentValidation=function(show=true){
+
+    oldSave(show);
+
+    checkCompletion();
+
+};

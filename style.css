@@ -304,6 +304,7 @@ header h1{
 
 }
 
+
 /* =====================================
    VALIDATION WORKSPACE
 ===================================== */
@@ -312,17 +313,125 @@ header h1{
 
     display:grid;
 
-    grid-template-rows:40% 60%;
+    grid-template-rows:35% 65%;
 
     gap:20px;
 
     height:calc(100vh - 30px);
 
+}
+
+/* =======================
+   TOP ROW
+======================= */
+
+.top-workspace{
+
+    display:grid;
+
+    grid-template-columns:40% 60%;
+
+    gap:20px;
+
     min-height:0;
 
 }
 
-/* ---------- CATEGORY PANEL ---------- */
+/* =======================
+   QUEUE PANEL
+======================= */
+
+.queue-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+
+}
+
+.queue-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+/* =======================
+   CURRENT PANEL
+======================= */
+
+.current-panel{
+
+    background:#fff;
+
+    border:1px solid #ddd;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    overflow-y:auto;
+
+}
+
+.current-panel h2{
+
+    margin-bottom:15px;
+
+}
+
+.current-panel label{
+
+    display:block;
+
+    margin-top:12px;
+
+    margin-bottom:6px;
+
+    font-weight:600;
+
+}
+
+.current-panel input{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+}
+
+/* =======================
+   CURRENT SKU TABLE
+======================= */
+
+.current-sku-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.current-sku-table td{
+
+    border:1px solid #ddd;
+
+    padding:8px;
+
+}
+
+/* =======================
+   CATEGORY PANEL
+======================= */
 
 .category-panel{
 
@@ -334,32 +443,13 @@ header h1{
 
     padding:15px;
 
-
-
     overflow-y:auto;
-
-}
-.category-panel{
-
-    height:100%;
 
 }
 
 .category-panel h2{
 
     margin-bottom:15px;
-
-}
-
-.category-panel label{
-
-    display:block;
-
-    margin-top:12px;
-
-    margin-bottom:6px;
-
-    font-weight:600;
 
 }
 
@@ -379,222 +469,71 @@ header h1{
 
 .category-panel textarea{
 
-    min-height:80px;
-
-    resize:vertical;
+    min-height:100px;
 
 }
 
-/* ---------- BOTTOM ROW ---------- */
+/* =======================
+   VALIDATION QUEUE ITEMS
+======================= */
 
-.top-workspace{
+.queue-room{
 
-    display:grid;
-
-    grid-template-columns:40% 60%;
-
-    gap:20px;
-
-    min-height:0;
+    margin-bottom:20px;
 
 }
 
-/* ---------- SKU PANEL ---------- */
-
-.sku-panel{
-
-    background:#fff;
-
-    border:1px solid #ddd;
-
-    border-radius:8px;
-
-    padding:15px;
-
-    overflow-y:auto;
-   min-height:0;
-
-}
-
-.sku-panel h2{
-
-    margin-bottom:15px;
-
-}
-
-.sku-panel label{
-
-    display:block;
-
-    margin-top:12px;
-
-    margin-bottom:6px;
-
-    font-weight:600;
-
-}
-
-.sku-panel input,
-.sku-panel textarea,
-.sku-panel select{
-
-    width:100%;
-
-    padding:10px;
-
-    border:1px solid #ccc;
-
-    border-radius:6px;
-
-}
-
-/* ---------- QTY PANEL ---------- */
-
-.qty-panel{
-
-    background:#fff;
-
-    border:1px solid #ddd;
-
-    border-radius:8px;
-
-    padding:15px;
-
-    overflow-y:auto;
-    min-height:0;
-
-}
-
-.qty-panel h2{
-
-    margin-bottom:15px;
-
-}
-
-
-.sku-panel,
-.qty-panel{
-
-    height:100%;
-
-}
-
-#roomDropdown{
-
-    height:40px;
-
-}
-
-#itemDropdown{
-
-    height:180px;
-
-}
-
-#categoryDropdown{
-
-    height:150px;
-
-}
-
-
-
-.selected-sku-container {
-
-    border: 1px solid #ccc;
-
-    min-height: 50px;
-
-    padding: 8px;
-
-    margin-bottom: 15px;
-
-    background: #fff;
-
-}
-
-.selected-sku {
-
-    display: inline-block;
-
-    padding: 6px 10px;
-
-    margin: 4px;
-
-    background: #1f4e79;
-
-    color: white;
-
-    border-radius: 4px;
-
-    cursor: pointer;
-
-}
-/* =====================================
-   EXTRA ITEMS
-===================================== */
-
-#extraItemsContainer{
-
-    margin-top:10px;
-
-}
-
-.extra-item-row{
-
-    display:flex;
-
-    gap:10px;
-
-    margin-bottom:10px;
-
-}
-
-.extra-item-row input{
-
-    flex:1;
-
-}
-
-.extra-item-row button{
-
-    width:40px;
-
-}
-
-#addExtraItemBtn{
-
-    margin-top:10px;
-
-    padding:10px;
-
-    border:none;
-
-    border-radius:6px;
+.queue-room-title{
 
     background:#1f4e79;
 
-    color:white;
+    color:#fff;
 
-    cursor:pointer;
+    padding:8px 10px;
+
+    border-radius:6px;
+
+    font-weight:bold;
 
 }
 
-/* =====================================
-   DRAWING STATUS
-===================================== */
+.queue-item{
 
-.drawing-status{
-
-    margin-top:15px;
-
-    padding:12px;
-
-    background:#f7f8fa;
+    padding:10px;
 
     border:1px solid #ddd;
 
-    border-radius:6px;
+    border-top:none;
+
+    cursor:pointer;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.queue-item:hover{
+
+    background:#eef5fb;
+
+}
+
+.queue-item.active{
+
+    background:#d9edf9;
+
+    border-left:5px solid #1f4e79;
+
+}
+
+.queue-status{
+
+    font-size:12px;
+
+    font-weight:bold;
 
 }
 
@@ -818,7 +757,7 @@ header h1{
     height:auto;
 
 }
-   .bottom-workspace{
+ .top-workspace{
 
     grid-template-columns:1fr;
 

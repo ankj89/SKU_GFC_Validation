@@ -3,7 +3,10 @@
 // =====================================
 
 let validationStore = [];
-let qtyValidationData = [];
+
+let currentQueueIndex = 0;
+
+let currentValidation = null;
 // =====================================
 // SAVE PAGE VALIDATION
 // =====================================
@@ -240,155 +243,134 @@ function collectChecklist() {
 
 }
 
-// =====================================
-// PAGE LOOKUP
-// =====================================
+function saveCurrentSKUValidation(showPopup=false){
 
-function getValidationByPage(
-    pageNo
-) {
-console.log(
-    "STORE",
-    validationStore
-);
-    return validationStore.find(
+    const queueItem =
+        projectMaster.validationQueue[currentQueueIndex];
 
-        row =>
+    const record={
 
-            row.pageNo ===
-            pageNo
+        queueId:
+            queueItem.id,
 
-    );
+        room:
+            queueItem.room,
 
-}
+        item:
+            queueItem.item,
 
-// =====================================
-// ROOM COVERAGE
-// =====================================
+        boqQty:
+            queueItem.qty,
 
-function buildRoomCoverage() {
+        price:
+            queueItem.price,
 
-    const coverage = {};
+        category:
+            queueItem.category,
 
-    validationStore.forEach(record => {
+        drawingFound:
+            document.getElementById("drawingFound")?.checked ?? true,
 
-        const room =
-            record.room;
+        drawingPage:
+            Number(
+                document.getElementById("drawingPage")?.value || 0
+            ),
 
-        if (
-            !coverage[room]
-        ) {
+        gfcQty:
+            Number(
+                document.getElementById("gfcQty")?.value || 0
+            ),
 
-            coverage[room] =
-                [];
+        categories:
+            [...selectedCategoryBasket],
 
-        }
+        checklist:
+            collectChecklist(),
 
-        record.items.forEach(item => {
+        remarks:
+            document.getElementById("overallRemarks").value,
 
-            const exists =
+        extraDrawingItems:
+            collectExtraItems(),
 
-                coverage[room]
-                .some(
+        status:"Completed",
 
-                    existing =>
+        savedOn:
+            new Date().toISOString()
 
-                        existing.item ===
-                        item.item
+    };
 
-                );
+    const existingIndex =
+        validationStore.findIndex(
 
-            if (
-                !exists
-            ) {
+            x=>x.queueId===record.queueId
 
-                coverage[room]
-                .push(item);
+        );
 
-            }
+    if(existingIndex>=0){
 
-        });
-
-    });
-
-    return coverage;
-
-}
-
-// =====================================
-// COVERED SKU LIST
-// =====================================
-
-function getCoveredSKUs() {
-
-    const covered =
-        new Set();
-
-    validationStore.forEach(record => {
-
-        record.items.forEach(item => {
-
-            covered.add(
-                item.item
-            );
-
-        });
-
-    });
-
-    return Array.from(
-        covered
-    );
-
-}
-
-// =====================================
-// MISSING SKU REPORT
-// =====================================
-
-function getMissingSKUs() {
-
-    const covered =
-
-        getCoveredSKUs();
-
-    const missing = [];
-
-    if (
-        !projectMaster
-    ) {
-
-        return missing;
+        validationStore[existingIndex]=record;
 
     }
 
-    const fullHomeItems =
+    else{
 
-        projectMaster.rooms[
-            "FULL HOME"
-        ] || [];
+        validationStore.push(record);
 
-    fullHomeItems.forEach(item => {
+    }
 
-        if (
+    projectMaster.validationQueue[currentQueueIndex].status="Completed";
 
-            !covered.includes(
-                item.item
-            )
+    if(showPopup){
 
-        ) {
+        alert("Validation Saved");
 
-            missing.push(
-                item
-            );
-
-        }
-
-    });
-
-    return missing;
+    }
 
 }
+
+function getCurrentQueueItem(){
+
+    return projectMaster.validationQueue[currentQueueIndex];
+
+}
+
+function loadQueueItem(index){
+
+    currentQueueIndex=index;
+
+    currentValidation=getCurrentQueueItem();
+
+}
+
+function saveAndNext(){
+
+    saveCurrentSKUValidation();
+
+    if(
+
+        currentQueueIndex<
+
+        projectMaster.validationQueue.length-1
+
+    ){
+
+        loadQueueItem(
+
+            currentQueueIndex+1
+
+        );
+
+    }
+
+}
+
+
+
+
+
+
+
 
 // =====================================
 // EXPORT ACCESS

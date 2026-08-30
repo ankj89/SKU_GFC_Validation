@@ -3,7 +3,7 @@
 // =====================================
 
 let projectMaster = null;
-let currentVisibleItems = [];
+
 // =====================================
 // SAVE PROJECT MASTER
 // =====================================
@@ -211,31 +211,39 @@ Object.keys(rooms).forEach(room => {
 
     rooms[room].forEach(item => {
 
-        validationQueue.push({
+    validationQueue.push({
 
-            id: validationQueue.length + 1,
+    id: validationQueue.length + 1,
 
-            room: item.room,
+    room: item.room,
 
-            item: item.item,
+    item: item.item,
 
-            qty: item.qty,
+    qty: item.qty,
 
-            price: item.price,
+    price: item.price,
 
-            category: item.category,
+    category: item.category,
 
-            drawingPage: null,
+    drawingPage: null,
 
-            gfcQty: null,
+    gfcQty: null,
 
-            checklist: [],
+    drawingFound: true,
 
-            remarks: "",
+    categories: [],
 
-            status: "Pending"
+    checklist: [],
 
-        });
+    remarks: "",
+
+    validatedBy: "",
+
+    validatedOn: "",
+
+    status: "Pending"
+
+});
 
     });
 
@@ -271,8 +279,6 @@ console.log(
     projectMaster
 );
 
-populateRoomDropdown();
-
 document
 .getElementById(
     "validationSection"
@@ -290,168 +296,6 @@ alert(
 }
 
 
-// =====================================
-// ROOM DROPDOWN
-// =====================================
-
-function populateRoomDropdown() {
-
-    const dropdown =
-        document.getElementById(
-            "roomDropdown"
-        );
-
-    dropdown.innerHTML = "";
-
-    const blankOption =
-        document.createElement(
-            "option"
-        );
-
-    blankOption.value = "";
-
-    blankOption.textContent =
-        "-- Select Room --";
-
-    dropdown.appendChild(
-        blankOption
-    );
-
-    Object.keys(
-        projectMaster.rooms
-    ).forEach(room => {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-        option.value =
-            room;
-
-        option.textContent =
-            room;
-
-        dropdown.appendChild(
-            option
-        );
-
-    });
-
-}
-
-// =====================================
-// ITEM DROPDOWN
-// =====================================
-
-function populateItemDropdown() {
-
-    const room =
-        document.getElementById(
-            "roomDropdown"
-        )
-        .value;
-
-    const dropdown =
-        document.getElementById(
-            "itemDropdown"
-        );
-
-    dropdown.innerHTML = "";
-
-    if (
-        !room
-    ) {
-        return;
-    }
-
-    currentVisibleItems =
-    projectMaster.rooms[
-        room
-    ] || [];
-
-const items =
-    currentVisibleItems;
-
-    items.forEach(item => {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-    option.textContent =
-    item.display;
-
-        option.value =
-            JSON.stringify(
-                item
-            );
-
-        dropdown.appendChild(
-            option
-        );
-
-    });
-
-}
-
-// =====================================
-// PROJECT INFO
-// =====================================
-function filterVisibleItems() {
-
-    const searchText =
-        document
-        .getElementById(
-            "itemSearch"
-        )
-        .value
-        .toLowerCase();
-
-    const dropdown =
-        document
-        .getElementById(
-            "itemDropdown"
-        );
-
-    dropdown.innerHTML = "";
-
-    currentVisibleItems
-
-    .filter(item => {
-
-        const text =
-    item.display.toLowerCase();
-
-        return text.includes(
-            searchText
-        );
-
-    })
-
-    .forEach(item => {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-        option.textContent =
-    item.display;
-
-        option.value =
-            JSON.stringify(
-                item
-            );
-
-        dropdown.appendChild(
-            option
-        );
-
-    });
-
-}
 function getProjectInfo() {
 
     return {
@@ -488,19 +332,3 @@ document
     saveProjectMaster
 );
 
-document
-.getElementById(
-    "roomDropdown"
-)
-.addEventListener(
-    "change",
-    populateItemDropdown
-);
-document
-.getElementById(
-    "itemSearch"
-)
-.addEventListener(
-    "input",
-    filterVisibleItems
-);

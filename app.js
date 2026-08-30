@@ -58,7 +58,11 @@ function initializeValidationQueue(){
 
 }
 
+function getCurrentQueueItem(){
 
+    return projectMaster.validationQueue[currentQueueIndex];
+
+}
 // =====================================
 // RENDER VALIDATION QUEUE
 // =====================================

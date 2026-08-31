@@ -240,36 +240,25 @@
 
         <!-- ================= VALIDATION QUEUE ================= -->
 
-       <div class="queue-panel">
+      <div class="sku-navigation">
 
-    <div class="queue-nav">
+    <button id="prevSkuBtn">
+        ◀
+    </button>
 
-        <button id="prevSkuBtn">
-            ◀ Previous
-        </button>
+    <div id="skuNavigator">
 
-        <div class="queue-progress">
+        <div id="navRoom"></div>
 
-            <div id="queueCounter">
-                1 / 186
-            </div>
+        <div id="navSku"></div>
 
-            <div class="progress-bar">
-
-                <div
-                    id="queueProgressFill"
-                    class="progress-fill">
-                </div>
-
-            </div>
-
-        </div>
-
-        <button id="nextSkuBtn">
-            Next ▶
-        </button>
+        <div id="navProgress"></div>
 
     </div>
+
+    <button id="nextSkuBtn">
+        ▶
+    </button>
 
 </div>
 
@@ -342,6 +331,28 @@
 
         </div>
 
+<div id="jumpModal" class="jump-modal hidden">
+
+    <div class="jump-box">
+
+        <input
+            id="jumpSearch"
+            type="text"
+            placeholder="Search SKU or Room">
+
+        <div id="jumpList"></div>
+
+        <button
+            id="closeJumpBtn">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+
+        
         <!-- ================= CATEGORY ================= -->
 
         <div class="category-panel">

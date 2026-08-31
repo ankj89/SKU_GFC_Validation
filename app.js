@@ -66,112 +66,13 @@ function getCurrentQueueItem(){
 // RENDER VALIDATION QUEUE
 // =====================================
 
-function renderValidationQueue(){
 
-    const container =
-        document.getElementById(
-            "validationQueue"
-        );
-
-    if(!container){
-        return;
-    }
-
-    container.innerHTML = "";
-
-    const roomGroups = {};
-
-    validationQueue.forEach(item=>{
-
-        if(!roomGroups[item.room]){
-
-            roomGroups[item.room]=[];
-
-        }
-
-        roomGroups[item.room].push(item);
-
-    });
-
-    Object.keys(roomGroups).forEach(room=>{
-
-        const roomBlock =
-            document.createElement("div");
-
-        roomBlock.className="queue-room";
-
-        roomBlock.innerHTML=`
-
-            <div class="queue-room-title">
-
-                ${room}
-
-            </div>
-
-        `;
-
-        roomGroups[room].forEach(item=>{
-
-            const row =
-                document.createElement("div");
-
-            row.className="queue-item";
-
-            row.dataset.id=item.id;
-
-            row.innerHTML=`
-
-                <span>
-
-                    ${item.item}
-
-                </span>
-
-                <span class="queue-status">
-
-                    ${item.status}
-
-                </span>
-
-            `;
-
-            row.onclick=()=>{
-
-                loadQueueItemById(item.id);
-
-            };
-
-            roomBlock.appendChild(row);
-
-        });
-
-        container.appendChild(roomBlock);
-
-    });
-
-}
 
 
 // =====================================
 // LOAD BY ID
 // =====================================
 
-function loadQueueItemById(id){
-
-    const index =
-        validationQueue.findIndex(
-
-            x=>x.id===id
-
-        );
-
-    if(index>=0){
-
-        loadQueueItem(index);
-
-    }
-
-}
 
 function updateQueueNavigator(){
 
@@ -202,21 +103,20 @@ function updateQueueNavigator(){
 
 function loadQueueItem(index){
 
-    currentQueueIndex=index;
+    currentQueueIndex = index;
 
-    currentSKU=
-        validationQueue[index];
-
-    highlightQueueItem();
+    currentSKU = validationQueue[index];
 
     renderCurrentSKU();
+
     updateWindowTitle();
-updateQueueNavigator();
-  
+
+    updateQueueNavigator();
+
 }
 
 function openJumpModal(){
-saveCurrentValidation(false);
+
     const list =
         document.getElementById("jumpList");
 
@@ -245,7 +145,8 @@ saveCurrentValidation(false);
 
         row.onclick=()=>{
 
-            saveCurrentSKUValidation();
+          
+             saveCurrentValidation(false);
 
             loadQueueItem(index);
 
@@ -269,27 +170,7 @@ saveCurrentValidation(false);
 // HIGHLIGHT ACTIVE SKU
 // =====================================
 
-function highlightQueueItem(){
 
-    document
-    .querySelectorAll(".queue-item")
-    .forEach(row=>{
-
-        row.classList.remove("active");
-
-        if(
-
-            Number(row.dataset.id)===currentSKU.id
-
-        ){
-
-            row.classList.add("active");
-
-        }
-
-    });
-
-}
 
 
 // =====================================
@@ -1089,12 +970,7 @@ saveAndNext=function(){
 // AUTO SCROLL ACTIVE ITEM
 // =====================================
 
-const oldHighlightQueueItem =
-    highlightQueueItem;
 
-highlightQueueItem=function(){
-
-    oldHighlightQueueItem();
 
     const active =
 

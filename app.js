@@ -606,7 +606,7 @@ function loadExistingValidation(){
 
     restoreChecklist(saved);
 
-    restoreExtraItems(saved.extraDrawingItems);
+  
 
 }
 
@@ -745,12 +745,7 @@ function saveCurrentValidation(showMessage = true){
             )
         ),
 
-    extraDrawingItems:
-        JSON.parse(
-            JSON.stringify(
-                collectExtraItems()
-            )
-        ),
+   
 
     savedOn:
         new Date().toISOString()
@@ -1018,14 +1013,7 @@ function clearValidationForm(){
 
     generateChecklist();
 
-    const extraContainer =
-        document.getElementById("extraItemsContainer");
-
-    if(extraContainer){
-
-        extraContainer.innerHTML="";
-
-    }
+    
 
 }
 

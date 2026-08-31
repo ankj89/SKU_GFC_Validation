@@ -313,11 +313,13 @@ header h1{
 
     display:grid;
 
-    grid-template-rows:35% 65%;
+    grid-template-rows:auto 1fr;
 
     gap:20px;
 
     height:calc(100vh - 30px);
+
+    min-height:0;
 
 }
 
@@ -375,8 +377,6 @@ header h1{
 
     padding:15px;
 
-    overflow-y:auto;
-
 }
 
 .current-panel h2{
@@ -396,7 +396,11 @@ header h1{
     font-weight:600;
 
 }
+.current-panel input{
 
+    height:38px;
+
+}
 .current-panel input{
 
     width:100%;
@@ -406,6 +410,12 @@ header h1{
     border:1px solid #ccc;
 
     border-radius:6px;
+
+}
+
+.current-panel input{
+
+    height:38px;
 
 }
 
@@ -421,11 +431,23 @@ header h1{
 
 }
 
+.current-sku-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-bottom:12px;
+
+}
+
 .current-sku-table td{
 
     border:1px solid #ddd;
 
-    padding:8px;
+    padding:6px 10px;
+
+    vertical-align:middle;
 
 }
 
@@ -445,8 +467,9 @@ header h1{
 
     overflow-y:auto;
 
-}
+    min-height:0;
 
+}
 .category-panel h2{
 
     margin-bottom:15px;

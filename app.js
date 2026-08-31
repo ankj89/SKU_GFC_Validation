@@ -216,7 +216,7 @@ updateQueueNavigator();
 }
 
 function openJumpModal(){
-
+saveCurrentValidation(false);
     const list =
         document.getElementById("jumpList");
 
@@ -564,32 +564,31 @@ function loadExistingValidation(){
         return;
     }
 
-    const saved =
+    const saved = validationStore.find(
 
-        validationStore.find(
+        x => x.queueId === currentSKU.id
 
-            x=>x.queueId===currentSKU.id
+    );
 
-        );
+    clearValidationForm();
 
     if(!saved){
-
-        selectedCategoryBasket=[];
-
-        renderSelectedCategories();
-
-        generateChecklist();
-
-        document
-        .getElementById(
-            "overallRemarks"
-        ).value="";
-
         return;
-
     }
 
-    selectedCategoryBasket=
+    document.getElementById("drawingPage").value =
+        saved.drawingPage || "";
+
+    document.getElementById("gfcQty").value =
+        saved.gfcQty || "";
+
+    document.getElementById("drawingFound").checked =
+        saved.drawingFound ?? true;
+
+    document.getElementById("overallRemarks").value =
+        saved.overallRemarks || "";
+
+    selectedCategoryBasket =
 
         JSON.parse(
 
@@ -605,35 +604,9 @@ function loadExistingValidation(){
 
     generateChecklist();
 
-    document
-    .getElementById(
-        "overallRemarks"
-    ).value=
-
-        saved.remarks || "";
-
     restoreChecklist(saved);
 
-    document
-    .getElementById(
-        "drawingPage"
-    ).value=
-
-        saved.drawingPage || "";
-
-    document
-    .getElementById(
-        "gfcQty"
-    ).value=
-
-        saved.gfcQty || "";
-
-    document
-    .getElementById(
-        "drawingFound"
-    ).checked=
-
-        saved.drawingFound;
+    restoreExtraItems(saved.extraDrawingItems);
 
 }
 
@@ -732,64 +705,57 @@ function saveCurrentValidation(showMessage = true){
         return;
     }
 
-    const record={
+   const record = {
 
-        queueId:
-            currentSKU.id,
+    queueId: currentSKU.id,
 
-        room:
-            currentSKU.room,
+    room: currentSKU.room,
 
-        item:
-            currentSKU.item,
+    item: currentSKU.item,
 
-        boqQty:
-            currentSKU.qty,
+    boqQty: currentSKU.qty,
 
-        price:
-            currentSKU.price,
+    price: currentSKU.price,
 
-        category:
-            currentSKU.category,
+    category: currentSKU.category,
 
-        drawingFound:
-            document.getElementById(
-                "drawingFound"
-            ).checked,
+    drawingFound:
+        document.getElementById("drawingFound").checked,
 
-        drawingPage:
-            Number(
-                document.getElementById(
-                    "drawingPage"
-                ).value || 0
-            ),
+    drawingPage:
+        document.getElementById("drawingPage").value,
 
-        gfcQty:
-            Number(
-                document.getElementById(
-                    "gfcQty"
-                ).value || 0
-            ),
+    gfcQty:
+        document.getElementById("gfcQty").value,
 
-        categories:
-            JSON.parse(
-                JSON.stringify(
-                    selectedCategoryBasket
-                )
-            ),
+    overallRemarks:
+        document.getElementById("overallRemarks").value,
 
-        checklist:
-            collectChecklist(),
+    categories:
+        JSON.parse(
+            JSON.stringify(
+                selectedCategoryBasket
+            )
+        ),
 
-        remarks:
-            document.getElementById(
-                "overallRemarks"
-            ).value,
+    checklist:
+        JSON.parse(
+            JSON.stringify(
+                collectChecklist()
+            )
+        ),
 
-        savedOn:
-            new Date().toISOString()
+    extraDrawingItems:
+        JSON.parse(
+            JSON.stringify(
+                collectExtraItems()
+            )
+        ),
 
-    };
+    savedOn:
+        new Date().toISOString()
+
+};
 
     const existingIndex=
 
@@ -1022,27 +988,23 @@ document
 
 function clearValidationForm(){
 
-    selectedCategoryBasket=[];
+    document.getElementById("drawingPage").value = "";
+
+    document.getElementById("gfcQty").value = "";
+
+    document.getElementById("overallRemarks").value = "";
+
+    document.getElementById("drawingFound").checked = true;
+
+    selectedCategoryBasket = [];
 
     renderSelectedCategories();
 
     generateChecklist();
 
-    document.getElementById(
-        "overallRemarks"
-    ).value="";
-
-    document.getElementById(
-        "drawingPage"
-    ).value="";
-
-    document.getElementById(
-        "gfcQty"
-    ).value="";
-
-    document.getElementById(
-        "drawingFound"
-    ).checked=true;
+    document
+        .getElementById("extraItemsContainer")
+        .innerHTML = "";
 
 }
 
@@ -1214,15 +1176,16 @@ saveCurrentValidation=function(show=true){
     checkCompletion();
 
 };
+
 document
 .getElementById("prevSkuBtn")
 .addEventListener("click",()=>{
 
+    saveCurrentValidation(false);
+
     if(currentQueueIndex>0){
 
-        loadQueueItem(
-            currentQueueIndex-1
-        );
+        loadQueueItem(currentQueueIndex-1);
 
     }
 
@@ -1232,14 +1195,16 @@ document
 .getElementById("nextSkuBtn")
 .addEventListener("click",()=>{
 
+    saveCurrentValidation(false);
+
     if(
-        currentQueueIndex<
-        projectMaster.validationQueue.length-1
+
+        currentQueueIndex <
+        validationQueue.length-1
+
     ){
 
-        loadQueueItem(
-            currentQueueIndex+1
-        );
+        loadQueueItem(currentQueueIndex+1);
 
     }
 

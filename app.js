@@ -174,6 +174,29 @@ function loadQueueItemById(id){
 
 }
 
+function updateQueueNavigator(){
+
+    const total =
+        projectMaster.validationQueue.length;
+
+    const current =
+        currentQueueIndex + 1;
+
+    document.getElementById(
+        "queueCounter"
+    ).innerText =
+        `${current} / ${total}`;
+
+    document.getElementById(
+        "queueProgressFill"
+    ).style.width =
+        `${current / total * 100}%`;
+
+}
+
+
+
+
 
 // =====================================
 // LOAD CURRENT SKU
@@ -190,7 +213,7 @@ function loadQueueItem(index){
 
     renderCurrentSKU();
     updateWindowTitle();
-
+updateQueueNavigator();
 }
 
 
@@ -1143,3 +1166,34 @@ saveCurrentValidation=function(show=true){
     checkCompletion();
 
 };
+document
+.getElementById("prevSkuBtn")
+.addEventListener("click",()=>{
+
+    if(currentQueueIndex>0){
+
+        loadQueueItem(
+            currentQueueIndex-1
+        );
+
+    }
+
+});
+
+document
+.getElementById("nextSkuBtn")
+.addEventListener("click",()=>{
+
+    if(
+        currentQueueIndex<
+        projectMaster.validationQueue.length-1
+    ){
+
+        loadQueueItem(
+            currentQueueIndex+1
+        );
+
+    }
+
+});
+

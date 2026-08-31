@@ -304,33 +304,62 @@
 
             </table>
 
-            <hr>
+           <hr>
 
-            <label>Drawing Page</label>
+<label>Drawing Page</label>
 
-            <input
-                type="number"
-                id="drawingPage">
+<input
+    type="number"
+    id="drawingPage">
 
-            <label>Visible Qty in GFC</label>
+<label>Elevation Number</label>
 
-            <input
-                type="number"
-                id="gfcQty">
+<input
+    type="text"
+    id="elevationNo"
+    placeholder="Eg. E1 / E2 / TV Wall / Section A">
 
-            <label>
+<label>Visible Qty in GFC</label>
 
-                <input
-                    type="checkbox"
-                    id="drawingFound"
-                    checked>
+<input
+    type="number"
+    id="gfcQty">
 
-                Drawing Found
+<label>
 
-            </label>
+    <input
+        type="checkbox"
+        id="drawingFound"
+        checked>
 
-        </div>
+    Drawing Found
 
+</label>
+
+<div id="drawingMissingPanel" class="hidden">
+
+    <label>
+        Item should be added in Elevation
+    </label>
+
+    <input
+        type="text"
+        id="addElevation"
+        placeholder="Eg. Kitchen Elevation E2">
+
+    <label>
+        Instruction to GFC Team
+    </label>
+
+    <textarea
+        id="missingRemarks"
+        placeholder="Describe what needs to be added in GFC">
+    </textarea>
+
+</div>
+
+
+        
 <div id="jumpModal" class="jump-modal hidden">
 
     <div class="jump-box">

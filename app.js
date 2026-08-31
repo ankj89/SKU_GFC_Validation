@@ -194,7 +194,24 @@ function updateQueueNavigator(){
 
 }
 
+function updateNavigator(){
 
+    const item =
+        getCurrentQueueItem();
+
+    if(!item) return;
+
+    document.getElementById("navRoom").textContent =
+        item.room;
+
+    document.getElementById("navSku").textContent =
+        item.item;
+
+    document.getElementById("navProgress").textContent =
+
+        `${currentQueueIndex+1} / ${projectMaster.validationQueue.length}  •  ${item.status}`;
+
+}
 
 
 
@@ -214,8 +231,58 @@ function loadQueueItem(index){
     renderCurrentSKU();
     updateWindowTitle();
 updateQueueNavigator();
+    updateNavigator();
 }
 
+function openJumpModal(){
+
+    const list =
+        document.getElementById("jumpList");
+
+    list.innerHTML="";
+
+    projectMaster.validationQueue.forEach((item,index)=>{
+
+        const row =
+            document.createElement("div");
+
+        row.className="jump-row";
+
+        row.innerHTML=`
+
+            <b>${item.room}</b><br>
+
+            ${item.item}
+
+            <div style="float:right">
+
+                ${item.status}
+
+            </div>
+
+        `;
+
+        row.onclick=()=>{
+
+            saveCurrentSKUValidation();
+
+            loadQueueItem(index);
+
+            document
+                .getElementById("jumpModal")
+                .classList.add("hidden");
+
+        };
+
+        list.appendChild(row);
+
+    });
+
+    document
+        .getElementById("jumpModal")
+        .classList.remove("hidden");
+
+}
 
 // =====================================
 // HIGHLIGHT ACTIVE SKU
@@ -1194,6 +1261,44 @@ document
         );
 
     }
+
+});
+
+document
+.getElementById("skuNavigator")
+.onclick=openJumpModal;
+
+document
+.getElementById("closeJumpBtn")
+.onclick=()=>{
+
+    document
+    .getElementById("jumpModal")
+    .classList.add("hidden");
+
+};
+
+document
+.getElementById("jumpSearch")
+.addEventListener("input",function(){
+
+    const text=this.value.toLowerCase();
+
+    document
+    .querySelectorAll(".jump-row")
+    .forEach(row=>{
+
+        row.style.display=
+
+            row.innerText
+                .toLowerCase()
+                .includes(text)
+
+                ?"block"
+
+                :"none";
+
+    });
 
 });
 

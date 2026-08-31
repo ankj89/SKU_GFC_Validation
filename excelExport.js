@@ -411,25 +411,6 @@ function addMismatchSheet(
 
     ];
 
-    validationStore.forEach(page => {
-
-        (
-            page.extraDrawingItems || []
-        ).forEach(item => {
-
-            data.push([
-
-                page.pageNo,
-
-                item.item,
-
-                item.reason
-
-            ]);
-
-        });
-
-    });
 
     const sheet =
 

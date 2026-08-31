@@ -25,9 +25,8 @@ function generateReports() {
         container
     );
 
-    generateExtraScopeReport(
-        container
-    );
+    /*generateExtraScopeReport(
+        container)*/
 
 
 }
@@ -359,7 +358,7 @@ function generateMissingCoverageReport(
 // EXTRA SCOPE REPORT
 // =====================================
 
-function generateExtraScopeReport(
+/*function generateExtraScopeReport(
     container
 ) {
 
@@ -423,7 +422,7 @@ function generateExtraScopeReport(
     );
 
 }
-
+*/
 // =====================================
 // MISSING DRAWINGS
 // =====================================

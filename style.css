@@ -988,3 +988,127 @@ header h1{
     border-radius:0 0 6px 6px;
 
 }
+
+
+.sku-navigation{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+}
+
+#skuNavigator{
+
+    flex:1;
+
+    margin:0 15px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    background:#f5f5f5;
+
+}
+
+#navRoom{
+
+    font-weight:bold;
+
+    font-size:18px;
+
+}
+
+#navSku{
+
+    margin-top:4px;
+
+    color:#444;
+
+}
+
+#navProgress{
+
+    margin-top:6px;
+
+    color:#1f4e79;
+
+    font-weight:bold;
+
+}
+.jump-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+.jump-box{
+
+    width:600px;
+
+    max-height:80vh;
+
+    background:white;
+
+    border-radius:10px;
+
+    padding:20px;
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+#jumpSearch{
+
+    margin-bottom:15px;
+
+}
+
+#jumpList{
+
+    overflow-y:auto;
+
+    flex:1;
+
+}
+
+.jump-row{
+
+    padding:12px;
+
+    border-bottom:1px solid #eee;
+
+    cursor:pointer;
+
+}
+
+.jump-row:hover{
+
+    background:#eef5fb;
+
+}

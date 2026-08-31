@@ -15,7 +15,7 @@ body{
 }
 
 .hidden{
-    display:none;
+    display:none !important;
 }
 
 header{
@@ -1062,6 +1062,9 @@ header h1{
     z-index:9999;
 
 }
+.jump-modal.hidden{
+    display:none;
+}
 
 .jump-box{
 
@@ -1091,9 +1094,9 @@ header h1{
 
 #jumpList{
 
-    overflow-y:auto;
+    height:400px;
 
-    flex:1;
+    overflow-y:auto;
 
 }
 

@@ -48,7 +48,6 @@ function initializeValidationQueue(){
     validationQueue =
         projectMaster.validationQueue;
 
-    renderValidationQueue();
 
     if(validationQueue.length){
 
@@ -176,30 +175,11 @@ function loadQueueItemById(id){
 
 function updateQueueNavigator(){
 
-    const total =
-        projectMaster.validationQueue.length;
+    const item = getCurrentQueueItem();
 
-    const current =
-        currentQueueIndex + 1;
-
-    document.getElementById(
-        "queueCounter"
-    ).innerText =
-        `${current} / ${total}`;
-
-    document.getElementById(
-        "queueProgressFill"
-    ).style.width =
-        `${current / total * 100}%`;
-
-}
-
-function updateNavigator(){
-
-    const item =
-        getCurrentQueueItem();
-
-    if(!item) return;
+    if(!item){
+        return;
+    }
 
     document.getElementById("navRoom").textContent =
         item.room;
@@ -208,10 +188,11 @@ function updateNavigator(){
         item.item;
 
     document.getElementById("navProgress").textContent =
-
-        `${currentQueueIndex+1} / ${projectMaster.validationQueue.length}  •  ${item.status}`;
+        `${currentQueueIndex + 1} / ${projectMaster.validationQueue.length} • ${item.status}`;
 
 }
+
+
 
 
 
@@ -231,7 +212,7 @@ function loadQueueItem(index){
     renderCurrentSKU();
     updateWindowTitle();
 updateQueueNavigator();
-    updateNavigator();
+  
 }
 
 function openJumpModal(){

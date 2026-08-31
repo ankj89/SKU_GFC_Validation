@@ -988,23 +988,44 @@ document
 
 function clearValidationForm(){
 
-    document.getElementById("drawingPage").value = "";
+    const drawingPage =
+        document.getElementById("drawingPage");
 
-    document.getElementById("gfcQty").value = "";
+    if(drawingPage)
+        drawingPage.value="";
 
-    document.getElementById("overallRemarks").value = "";
+    const gfcQty =
+        document.getElementById("gfcQty");
 
-    document.getElementById("drawingFound").checked = true;
+    if(gfcQty)
+        gfcQty.value="";
 
-    selectedCategoryBasket = [];
+    const remarks =
+        document.getElementById("overallRemarks");
+
+    if(remarks)
+        remarks.value="";
+
+    const drawingFound =
+        document.getElementById("drawingFound");
+
+    if(drawingFound)
+        drawingFound.checked=true;
+
+    selectedCategoryBasket=[];
 
     renderSelectedCategories();
 
     generateChecklist();
 
-    document
-        .getElementById("extraItemsContainer")
-        .innerHTML = "";
+    const extraContainer =
+        document.getElementById("extraItemsContainer");
+
+    if(extraContainer){
+
+        extraContainer.innerHTML="";
+
+    }
 
 }
 

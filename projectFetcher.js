@@ -252,8 +252,7 @@ function populateReviewGrid(
 
 price:
     row.price
-        tr.dataset.description =
-    data.description || "";
+  
 
 });
 
@@ -349,6 +348,9 @@ function addReviewRow(
 
     `;
 
+tr.dataset.description =
+    data.description || "";
+    
     body.appendChild(
         tr
     );

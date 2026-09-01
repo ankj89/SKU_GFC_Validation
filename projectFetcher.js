@@ -475,7 +475,7 @@ rows
     category:
     row["Category"],
 
-    description:row["Item Description"],
+    description:row["Item Description"] || "",
 
 price:
     Number(row["Price"] || 0)

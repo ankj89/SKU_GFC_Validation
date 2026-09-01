@@ -252,6 +252,8 @@ function populateReviewGrid(
 
 price:
     row.price
+        tr.dataset.description =
+    data.description || "";
 
 });
 
@@ -472,6 +474,8 @@ rows
 
     category:
     row["Category"],
+
+    description:row["Item Description"],
 
 price:
     Number(row["Price"] || 0)

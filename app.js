@@ -192,6 +192,9 @@ function renderCurrentSKU(){
         "currentSKU"
     ).innerText =
         currentSKU.item;
+    
+    document.getElementById("currentDescription").innerText =
+        currentSKU.description || "-";
 
     document.getElementById(
         "currentQty"

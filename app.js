@@ -468,6 +468,19 @@ function loadExistingValidation(){
 
     document.getElementById("overallRemarks").value =
         saved.overallRemarks || "";
+    document.getElementById("elevationNo").value =
+    record.elevationNo || "";
+
+document.getElementById("addElevation").value =
+    record.addElevation || "";
+
+document.getElementById("missingRemarks").value =
+    record.missingRemarks || "";
+
+document.getElementById("drawingFound").checked =
+    record.drawingFound ?? true;
+
+toggleDrawingFound();
 
     selectedCategoryBasket =
 
@@ -611,6 +624,18 @@ function saveCurrentValidation(showMessage = true){
 
     overallRemarks:
         document.getElementById("overallRemarks").value,
+
+       elevationNo:
+    document.getElementById("elevationNo").value,
+
+addElevation:
+    document.getElementById("addElevation").value,
+
+missingRemarks:
+    document.getElementById("missingRemarks").value,
+
+drawingFound:
+    document.getElementById("drawingFound").checked,
 
     categories:
         JSON.parse(
@@ -1046,6 +1071,21 @@ function checkCompletion(){
 
 }
 
+function toggleDrawingFound(){
+
+    const found =
+        document.getElementById("drawingFound").checked;
+
+    document
+        .getElementById("drawingMissingPanel")
+        .classList.toggle(
+            "hidden",
+            found
+        );
+
+}
+
+
 
 // =====================================
 // OVERRIDE SAVE AGAIN
@@ -1132,4 +1172,9 @@ document
     });
 
 });
-
+document
+.getElementById("drawingFound")
+.addEventListener(
+    "change",
+    toggleDrawingFound
+);

@@ -80,6 +80,9 @@ rows.forEach(row => {
             ".category-input"
         )?.value.trim() || "";
 
+    const description =
+    row.dataset.description || "";
+
     if (
         !masterRFV &&
         rfvId
@@ -154,7 +157,7 @@ rows.forEach(row => {
     room,
 
     item,
-
+ description,
     qty,
     price,
     category,
@@ -218,7 +221,7 @@ Object.keys(rooms).forEach(room => {
     room: item.room,
 
     item: item.item,
-
+  description: item.description,
     qty: item.qty,
 
     price: item.price,
@@ -271,6 +274,7 @@ projectMaster = {
         masterPID,
 
     rooms,
+
 validationQueue
     
 };

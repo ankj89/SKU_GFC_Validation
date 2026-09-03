@@ -472,16 +472,16 @@ function loadExistingValidation(){
     document.getElementById("overallRemarks").value =
         saved.overallRemarks || "";
     document.getElementById("elevationNo").value =
-    record.elevationNo || "";
+    saved.elevationNo || "";
 
 document.getElementById("addElevation").value =
-    record.addElevation || "";
+    saved.addElevation || "";
 
 document.getElementById("missingRemarks").value =
-    record.missingRemarks || "";
+    saved.missingRemarks || "";
 
 document.getElementById("drawingFound").checked =
-    record.drawingFound ?? true;
+    saved.drawingFound ?? true;
 
 toggleDrawingFound();
 

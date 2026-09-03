@@ -202,7 +202,7 @@ prevPageBtn?.addEventListener(
     "click",
     async () => {
 
-        saveCurrentPageValidation(false);
+        saveCurrentValidation(false);
 
         if (
             currentPageNumber <= 1
@@ -227,7 +227,7 @@ nextPageBtn?.addEventListener(
     "click",
     async () => {
 
-        saveCurrentPageValidation(false);
+        saveCurrentValidation(false);
 
         if (
             currentPageNumber >= totalPages

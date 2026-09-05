@@ -449,11 +449,8 @@ function loadExistingValidation(){
         return;
     }
 
-    const saved = validationStore.find(
-
-        x => x.queueId === currentSKU.id
-
-    );
+   const saved =
+    getValidation(currentSKU.id);
 
     clearValidationForm();
 
@@ -688,12 +685,15 @@ function saveCurrentValidation(showMessage = true){
 
 function saveAndNext(){
 
-    saveCurrentSKUValidation();
+    // Save current SKU
+    saveCurrentValidation(false);
 
+    // Mark completed only after Save & Next
     currentSKU.status = "Completed";
 
     updateQueueNavigator();
 
+    // Move to next SKU
     if(currentQueueIndex < validationQueue.length - 1){
 
         loadQueueItem(currentQueueIndex + 1);

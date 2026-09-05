@@ -223,6 +223,7 @@ function renderCurrentSKU(){
     renderSelectedCategories();
 
     generateChecklist();
+    loadExistingValidation();
 
 }
 
@@ -687,31 +688,15 @@ function saveCurrentValidation(showMessage = true){
 
 function saveAndNext(){
 
-    saveCurrentValidation(false);
+    saveCurrentSKUValidation();
 
-    if(
+    currentSKU.status = "Completed";
 
-        currentQueueIndex <
+    updateQueueNavigator();
 
-        validationQueue.length-1
+    if(currentQueueIndex < validationQueue.length - 1){
 
-    ){
-
-        loadQueueItem(
-
-            currentQueueIndex+1
-
-        );
-
-    }
-
-    else{
-
-        alert(
-
-            "All SKUs validated."
-
-        );
+        loadQueueItem(currentQueueIndex + 1);
 
     }
 

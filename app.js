@@ -609,6 +609,7 @@ function saveCurrentValidation(showMessage = true){
     room: currentSKU.room,
 
     item: currentSKU.item,
+         description: currentSKU.description,
 
     boqQty: currentSKU.qty,
 
@@ -621,24 +622,24 @@ function saveCurrentValidation(showMessage = true){
 
     drawingPage:
         document.getElementById("drawingPage").value,
+       
+    elevationNo:
+        document.getElementById("elevationNo").value,
 
     gfcQty:
         document.getElementById("gfcQty").value,
+       
+       addElevation:
+        document.getElementById("addElevation").value,
+
+    missingRemarks:
+        document.getElementById("missingRemarks").value,
+
 
     overallRemarks:
         document.getElementById("overallRemarks").value,
 
-       elevationNo:
-    document.getElementById("elevationNo").value,
 
-addElevation:
-    document.getElementById("addElevation").value,
-
-missingRemarks:
-    document.getElementById("missingRemarks").value,
-
-drawingFound:
-    document.getElementById("drawingFound").checked,
 
     categories:
         JSON.parse(
@@ -661,31 +662,15 @@ drawingFound:
 
 };
 
-    const existingIndex=
+   saveCurrentSKUValidation(record);
 
-        validationStore.findIndex(
+   if(showMessage){
 
-            x=>x.queueId===record.queueId
-
-        );
-
-    if(existingIndex>=0){
-
-        validationStore[
-            existingIndex
-        ]=record;
-
-    }
-
-    else{
-
-        validationStore.push(record);
-
-    }
-
-    currentSKU.status="Completed";
+    currentSKU.status = "Completed";
 
     updateQueueStatus();
+
+}
 
     if(showMessage){
 

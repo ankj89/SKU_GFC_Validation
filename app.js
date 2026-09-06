@@ -224,7 +224,7 @@ function renderCurrentSKU(){
     renderSelectedCategories();
 
     generateChecklist();
-    loadExistingValidation();
+    Validation();
 
 }
 
@@ -344,7 +344,6 @@ function applyPrediction(){
     }
 
     const prediction =
-
         predictDrawing(currentSKU);
 
     if(!prediction){
@@ -353,19 +352,54 @@ function applyPrediction(){
 
     }
 
-    // Drawing Page
-
     document
         .getElementById("drawingPage")
         .value =
             prediction.page;
 
-    // Visual indication
-
     document
         .getElementById("drawingPage")
         .classList
         .add("suggested");
+
+    goToPDFPage(
+        prediction.page
+    );
+
+    showPredictionMessage(
+        prediction
+    );
+
+}
+
+function showPredictionMessage(prediction){
+
+    const div =
+        document.getElementById(
+            "predictionMessage"
+        );
+
+    if(!prediction){
+
+        div.innerHTML="";
+
+        return;
+
+    }
+
+    if(prediction.source==="SKU"){
+
+        div.innerHTML=
+            "💡 Suggested from previous validation of the same SKU";
+
+    }
+
+    else if(prediction.source==="ROOM"){
+
+        div.innerHTML=
+            "💡 Suggested from latest drawing of this room";
+
+    }
 
 }
 
@@ -496,6 +530,12 @@ function loadExistingValidation(){
     document.getElementById("drawingPage").value =
         saved.drawingPage || "";
 
+    if(saved.drawingPage){
+
+    goToPDFPage(saved.drawingPage);
+
+}
+
     document.getElementById("gfcQty").value =
         saved.gfcQty || "";
 
@@ -513,8 +553,6 @@ document.getElementById("addElevation").value =
 document.getElementById("missingRemarks").value =
     saved.missingRemarks || "";
 
-document.getElementById("drawingFound").checked =
-    saved.drawingFound ?? true;
 
 toggleDrawingFound();
 
@@ -1192,5 +1230,20 @@ document
 .addEventListener("input",function(){
 
     this.classList.remove("suggested");
+
+});
+
+document
+.getElementById("drawingPage")
+.addEventListener("input",()=>{
+
+    document
+    .getElementById("predictionMessage")
+    .innerHTML="";
+
+    document
+    .getElementById("drawingPage")
+    .classList
+    .remove("suggested");
 
 });

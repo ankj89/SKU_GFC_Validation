@@ -234,16 +234,64 @@ header h1{
 
 }
 
+.pdf-body{
+
+    display:flex;
+
+    flex:1;
+
+    overflow:hidden;
+
+}
+.thumbnail-panel{
+
+    width:120px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    border-right:1px solid #ddd;
+
+    background:#fafafa;
+
+}
+
 .pdf-scroll-container{
 
     flex:1;
 
     overflow:auto;
 
-    border:1px solid #ddd;
+    display:flex;
+
+    justify-content:center;
+
+    align-items:flex-start;
 
 }
+.thumbnail{
 
+    cursor:pointer;
+
+    margin:10px;
+
+    padding:4px;
+
+    border:2px solid transparent;
+
+    border-radius:6px;
+
+    background:white;
+
+}
+.thumbnail canvas{
+
+    width:90px;
+
+    display:block;
+
+}
 .viewer-toolbar{
 
     display:flex;
@@ -303,6 +351,7 @@ header h1{
     font-weight:600;
 
 }
+
 
 
 /* =====================================

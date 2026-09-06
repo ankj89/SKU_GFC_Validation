@@ -162,9 +162,7 @@ pdfCanvas.style.height =
 
     updatePageIndicators();
 
-    loadSavedValidation(
-        pageNumber
-    );
+
 
     updateThumbnailHighlight();
 }
@@ -249,34 +247,7 @@ nextPageBtn?.addEventListener(
 // LOAD SAVED VALIDATION
 // =========================================
 
-function loadSavedValidation(
-    pageNumber
-) {
 
-    clearValidationForm();
-
-    const pageData =
-        getValidationByPage(
-            pageNumber
-        );
- console.log(
-        "Loading Page",
-        pageNumber,
-        pageData
-    );
-
-    
-    if (!pageData) {
-
-        return;
-
-    }
-
-    restoreValidationForm(
-        pageData
-    );
-
-}
 
 // =========================================
 // CLEAR FORM
@@ -765,7 +736,7 @@ document
 
     zoomLevel += 0.25;
 
-document.getElementById("zoomPercent").innerText =
+document.getElementById("zoomResetBtn").innerText =
     Math.round(zoomLevel * 100) + "%";
 
     await renderPage(currentPageNumber);
@@ -776,14 +747,9 @@ document
 .getElementById("zoomOutBtn")
 ?.addEventListener("click", async () => {
 
-  zoomLevel = Math.max(
-    0.5,
-    zoomLevel - 0.25
-);
+  zoomLevel = Math.max(0.5,zoomLevel - 0.25);
 
-
-
-document.getElementById("zoomPercent").innerText =
+document.getElementById("zoomResetBtn").innerText =
     Math.round(zoomLevel * 100) + "%";
 
     await renderPage(currentPageNumber);
@@ -796,9 +762,7 @@ document
 
   zoomLevel = 1;
 
-
-
-document.getElementById("zoomPercent").innerText = "100%";
+document.getElementById("zoomResetBtn").innerText = "100%";
 
     await renderPage(currentPageNumber);
 

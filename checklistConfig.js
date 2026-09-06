@@ -256,35 +256,76 @@ pcc_roomwise:
 
     ]},
 
-    Pelmet: [
+    Pelmet: {drawingLevel : "ROOM",
+        checklist :[
+
 
         "AC/Curtain Pelmet elevation shown with clear dimensions",
         "AC/Curtain Pelmet Section shown with drop/cove dimensions",
         "AC/Curtain Pelmet distance from FFL shown",
         "AC/Curtain pelmet shown with dimensions",
-        "AC/Curtain pocket shown"
+        "AC/Curtain pocket shown",
+        "Core cutting postition shown"
 
-    ],
+    ]},
 
-    electricalWall: [
+    electricalWall_modules: {drawingLevel : "ROOM",
+        checklist :[
+
         
-        "New modules Shown in elevation with clear location xy coordinates",
-        "Relocation modules shown in elevation with clear location xy coordinates",
+        "New modules Shown in elevation with clear location xy coordinates and color code",
+        "Relocation modules shown in elevation with clear location xy coordinates and color code",
         "Existing modules Shown in elevation with clear xy coordinates",
-        "Module name and configuration Mentioned with socket(5A/15A)",
-        "All Fixtures(lights etc) shown in elevation with xy coordinates",
-        "Unique Legend and nomenclature shown for new/relocated/existing boards",
-        "Primary and secondary Looping Shown in elevation for wall points/fixtures(lights etc)",
-        "Looping Layout Shown for New modules",        
-        "Conduit Routing Shown for New and Relocation modules(from nearest board or junction box)",
-        "Unique Legend and nomenclature shown for light points",
+        "Dimensions shown from center of module",
+        "Sufficient margin maintained to avoid clash with woodwork",
+        "Module name and configuration Mentioned with number and type of socket(5A/15A)",
+        "Primary and secondary Looping Shown in elevation for wall points/fixtures(lights etc)",   
         "Trims design/moulding clash checked",
-        "Modular unit/product clash checked",
-        "Loose Furniture Clash Checked",
-        "RCC clash checked",
-        "Accessibility for wiring Checked"
+        "Modular unit/product hatch shown and  clash checked",
+        "Loose Furniture hatch shown and Clash Checked",
+        "RCC wall hatch shown and clash checked",
+         "Beam & col hatch shown and clash checked"
+       
 
-    ],
+    ]},
+
+     electricalWall_lights: {drawingLevel : "ROOM",
+        checklist :[
+
+        "All Fixtures(lights,cove lights, cabinate light etc) shown in elevation with xy coordinates",
+        "Unique Legend and nomenclature shown for new/relocated/existing boards",
+        "Primary and secondary Looping Shown in elevation with appropriate modules",
+        "Looping Layout Shown for New modules",        
+        "Trims design/moulding clash checked",
+        "Modular unit/product hatch shown and clash checked",
+        "Loose Furniture hacth shown and Clash Checked",
+        "RCC wall hatch shown and clash checked",
+        "Accessibility for wiring Checked",
+        "Beam & col hatch shown and clash checked"
+    ]},
+
+    electricalWall_AC: {drawingLevel : "ROOM",
+        checklist :[
+
+        "AC location shown on elevation (with or w/o pelmet as appropriate)",
+        "AC low side works and installation in Cx scope mentioned",
+        "AC electrical module/point shown with clear location xy coordinates and color code",
+        "AC point relocation shown with clear xy co-ordinates ",
+        "Dimensions shown from center of module",
+        "Sufficient margin maintained to avoid clash with woodwork",
+        "Module name and configuration Mentioned with number and type of socket(15A/32A)",  
+        "Trims design/moulding clash checked",
+        "False ceiling level shown and clash checked", 
+        "Modular unit/product hatch shown and  clash checked",
+        "Loose Furniture hatch shown and Clash Checked",
+        "RCC wall hatch shown and clash checked",
+         "Beam & col hatch shown and clash checked",
+            "Core cutting shown as appropriate"
+           
+       
+
+    ]},
+
 
     electricalCeiling_lights_fullhome:
     {drawingLevel : "FULL_HOME",
@@ -531,6 +572,7 @@ pcc_roomwise:
         "Front and side Section Available (external and interal elevations)",
         "L x H X D mentioned",
         "Shutter details shown along with opening side and details of design elements(as applicable)",
+        "Shutter opening details and mechanisim shown (swing, sliding,pocket door etc)",
         "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
         "All Material type and specs Mentioned",
         "All Material Thickness Mentioned",
@@ -538,7 +580,8 @@ pcc_roomwise:
         "All Finish Code Mentioned",
         "All Lock location and Details Mentioned",
         "All Handle locations and Details Mentioned",
-        "All Hardware details mentioned",
+        "All hinge type (normal,softclose etc) mentioned",
+        "Any skirting requirement mentioned",
         "Seat Cushion Details Mentioned",
         "Fabric Code Mentioned",
         "Foam Density Mentioned"
@@ -591,14 +634,18 @@ pcc_roomwise:
         "Front and side Section Available (external and interal elevations)",
         "L x H X D mentioned",
         "Shutter details shown along with opening side and details of design elements(as applicable)",
-        "Internal Layout shown with dimensions (of shelves, drawers, partiitons etc)",
+        "Shutter opening details and mechanisim shown (swing, sliding,pocket door etc)",
+        "Internal Layout shown with location and dimensions (of shelves, drawers, partitions etc)",
+        "Quntity of shelves, drawers etc , matched with BOQ", 
         "All Material type and specification Mentioned",
         "All Material Thickness Mentioned",
         "All Finish Type Mentioned",
         "All Finish Code Mentioned",
-        "All Lock location and Details Mentioned",
-        "All Handle locations and Details Mentioned",
-         "All Hardware details mentioned"
+        "All Lock location Mentioned",
+        "All Handle locations Mentioned",
+            "Skirting requirment shown",
+            "any light provision shown along with looping with module",
+         "All hinges type mentioned"
     ]},
 
     // =====================================
@@ -664,6 +711,8 @@ pcc_roomwise:
 
     "Lock details complete (location and quantity)",
 
+    "Any skirting requirement shown",
+
     "Electrical provisions complete (light points, LED strips, switch placement wherever applicable)"
 
    
@@ -687,7 +736,8 @@ pcc_roomwise:
         "Laminate Code Mentioned",
         "Both Side Elevations Available",
         "Cove Details (if any) shown in the section with details",
-        "Covelight shown along with electrical provision",
+        "Covelight shown along with electrical provision/modulde",
+        "Covelight looping shown with module",
         "Skirting Interface Mentioned"
 
     ]},

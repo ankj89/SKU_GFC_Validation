@@ -133,7 +133,7 @@ category
 const checklist =
     CHECKLIST_CONFIG[
         category
-    ];
+    ]?.checklist || [];
 
 if (!checklist) {
     return document.createElement("div");

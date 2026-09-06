@@ -573,7 +573,9 @@ header h1{
 
     padding:15px;
 
-    overflow-y:auto;
+   display:flex;
+
+    flex-direction:column;
 
     min-height:0;
 
@@ -674,7 +676,11 @@ header h1{
 
 #checklistContainer{
 
-    margin-top:20px;
+    flex:1;
+
+    overflow-y:auto;
+
+    min-height:0;
 
 }
 
@@ -1041,13 +1047,17 @@ header h1{
 
 .sku-navigation{
 
-    display:flex;
+    position:sticky;
 
-    align-items:center;
+    top:0;
 
-    justify-content:space-between;
+    z-index:100;
 
-    margin-bottom:20px;
+    background:white;
+
+    padding:10px;
+
+    border-bottom:1px solid #ddd;
 
 }
 

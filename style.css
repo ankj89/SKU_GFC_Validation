@@ -1201,3 +1201,15 @@ header h1{
     border:2px solid #ffcc00;
 
 }
+
+.prediction-message{
+
+    margin-top:6px;
+
+    font-size:12px;
+
+    color:#666;
+
+    font-style:italic;
+
+}

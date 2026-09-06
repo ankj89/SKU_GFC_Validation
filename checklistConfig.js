@@ -4,7 +4,10 @@
 
 const CHECKLIST_CONFIG = {
 
-    demolition: [
+    demolition: {
+        drawingLevel : "ROOM",
+        checklist:
+        [
 
         "Demolition Area Clearly Demarcated in Plan",
         "Demolition Area Celarly demarcated in Elevation",
@@ -14,81 +17,201 @@ const CHECKLIST_CONFIG = {
         "Demolition Method Mentioned",
         "Post Demolition Finishing Mentioned"
 
-    ],
+    ]
+    },
 
-    wall: [
+    skirting_demolition: {
+        drawingLevel : "FULL_HOME",
+        checklist:
+        [
 
-        "New Wall Locations Shown",
+        "Skirting Area Clearly Demarcated in Plan",
+        "Post Demolition Finishing Mentioned"
+
+    ]
+    },
+
+    new_wall_without_opening: {
+        drawingLevel : "FULL_HOME",
+        checklist:[
+        "New Wall Locations Shown in plan",
         "Wall Thickness Mentioned",
         "Wall Length Mentioned",
-        "Wall Height Mentioned",
-        "Opening Dimensions Mentioned",
+        "Wall Height Mentioned"
+    ]},
+    
+ new_wall_with_opening: {
+        drawingLevel : "ROOM",
+        checklist:[
+
+        "New Wall Locations Shown in plan",
+        "Wall Thickness Mentioned",
+        "Wall Length Mentioned in elevation",
+        "Wall Height Mentioned in elevation",
+        "Opening location dimensions shown",
+        "Opening Dimensions Mentioned in elevation",
         "Lintel Details Mentioned with dimensions",
-        "Core Cutting Coordinates Mentioned"
+        "Wall finishing mentioned",
+        "Core Cutting shown/Coordinates Mentioned"
 
-    ],
+    ]},
 
-     CoreCutting: [
+
+
+
+     CoreCutting: 
+     {
+         drawingLevel : "ROOM",
+        checklist: [
 
         "Core cutting shown on elevation with size",
-        "Core Cutting xy Co-ordinates shown"
-    ],
+        "Core Cutting xy Co-ordinates shown",
+        "Core cutting in LS or Cx Scope mentioned"
+    ]},
 
 
-    flooring: [
+    flooring_fullhome: 
+    { drawingLevel : "FULL_HOME",
+        checklist:[
 
         "Flooring Grid plan shown with dimensions",
-        "Skirting Layout plan shown with dimensions",
+        "Skirting Layout plan shown with dimensions with skirting location",
         "Flooring Type shown with legends(Tile/Stone etc)",
         "Floor Tile Start Point Mentioned",
-        "Floor Tile Size Mentioned",
+        "Floor Tile/Stone Size Mentioned",
         "Slope Direction Mentioned",
-        "Skirting Thickness Mentioned",
+        "Any floor level drop mentioned",    
+        "Skirting height Mentioned",
+        "Skirting type mentioned(flush/nonflush)",
         "Grouting Details Mentioned"
 
-    ],
-pcc: [
+    ]},
+
+     flooring_roomwise: 
+    { drawingLevel : "ROOM",
+        checklist:[
+
+        "Flooring Grid plan shown with dimensions",
+        "Skirting Layout plan shown with dimensions with skirting location",
+        "Flooring Type shown with legends(Tile/Stone etc)",
+        "Floor Tile Start Point Mentioned",
+        "Floor Tile/Stone Size Mentioned",
+        "Slope Direction Mentioned",
+        "Any floor level drop mentioned",  
+        "Skirting height Mentioned",
+        "Skirting type mentioned(flush/nonflush)",
+        "Grouting Details Mentioned"
+
+    ]},
+
+
+    
+pcc_fullhome:
+{drawingLevel: "FULL_HOME",
+    checklist:[
 
         "PCC areas marked on plan with dimensions",
         "Level Difference Marked(if any)",
         "PCC thickness mentioned"
 
-    ],
+    ]
+},
+
+pcc_roomwise:
+{drawingLevel: "ROOM",
+    checklist:[
+
+        "PCC areas marked on plan with dimensions",
+        "Level Difference Marked(if any)",
+        "PCC thickness mentioned"
+
+    ]
+},    
     
-    coba: [
+    
+    coba:
+    {drawingLevel : "ROOM",
+        checklist:[
 
         "Brickbat areas marked on plan with dimensions",
         "Level Difference Marked(if any)",
         "Brickbat thickness mentioned"
 
-    ],
+    ]},
 
-    plaster: [
-
+    plaster_fullhome: 
+        {drawingLevel : "FULL_HOME",
+        checklist : [
         "Plaster areas marked on plan with dimensions",
         "Plaster areas marked on elevation with dimensions",
         "Plaster type mentioned",
         "Plaster thickness mentioned"
 
-    ],
-       punning: [
+    ]},
+    
+ plaster_roomwise: 
+        {drawingLevel : "FULL_HOME",
+        checklist : [
+        "Plaster areas marked on plan with dimensions",
+        "Plaster areas marked on elevation with dimensions",
+        "Plaster type mentioned",
+        "Plaster thickness mentioned"
+
+    ]},
+
+    
+       punning_normal_fullhome: 
+       {drawingLevel : "FULL_HOME",
+           checklist : [
 
         "Punning areas marked on plan with dimensions",
-        "Punning areas marked on elevation with dimesions(for grooves design)",
-        "Punning grooved c/c dimension mentioned with xy coordinates",
         "Punning type mentioned",
         "Punning thickness mentioned"
 
-    ],
-     waterproofing: [
+    ]},
+
+      punning_normal_roomwise: 
+       {drawingLevel : "ROOM",
+           checklist : [
+
+        "Punning areas marked on plan with dimensions",
+               "Punning type mentioned",
+        "Punning thickness mentioned"
+
+    ]},
+
+     punning_design_roomwise:
+         
+       {drawingLevel : "ROOM",
+           checklist : [
+        "Punning areas marked on elevation with dimesions(for grooves design)",
+        "Punning areas marked on elevation with dimesions(for other design)",       
+        "Punning grooves c/c dimension mentioned with xy coordinates",
+        "Curvature grooves radius and dimension mentioned",    
+        "Dimensions mentioned with xy coordinates for any other design including any curvature radius",
+        "Punning type mentioned",
+        "Punning thickness mentioned"
+
+    ]},
+
+    
+     waterproofing:
+     {drawingLevel : "ROOM",
+      checklist :
+         [
 
         "Waterproofing areas marked on plan with dimensions",
         "Waterproofing areas marked on elevation with dimensions",
         "Waterproofing type mentioned",
         "Waterproofing specifications mentioned"
 
-    ],
-    walltiling: [
+    ]},
+
+    
+    walltiling: {
+        drawingLevel : "ROOM",
+        checklist:
+        [
 
         "Dado Grid elevation as per tile size with dimensions",
         "Tile Start Point Mentioned",
@@ -98,8 +221,11 @@ pcc: [
         "Tile Area Dimensions Mentioned",
         "Grouting Details Mentioned"
 
-],
-    wallcladding: [
+]},
+    
+    wallcladding: 
+        {drawingLevel : "ROOM",
+         checklist :[
 
         "Wall Cladding Elevation shown with dimensions",
         "Tile Size Mentioned",
@@ -107,25 +233,28 @@ pcc: [
         "Cutout Dimensions Mentioned",
         "Tile Area Dimensions Mentioned"
 
-    ],
+    ]},
 
-    falseCeiling: [
+    falseCeiling_fullhome: 
+    {drawingLevel : "FULL_HOME",
+     checklist : 
+        [
 
         "Ceiling plan Layout shown with clear dimensions",
-        "False Ceiling type mentioned with Legends",
-        "Ceiling Sections shown: horizontal & vertical cuts with clear dimensions",
-        "False Ceiling levels/drops Mentioned",
+        "Any curvature , radius and dimension is showm",
+        "False Ceiling type mentioned with Legends (gypsum/POP/grid/pvc etc)",
+        "Ceiling Sections shown: horizontal & vertical cuts with clear dimensions and drop",
+        "False Ceiling levels/drops Mentioned on plan and matches with the legends", 
         "Band Size Mentioned with clear dimension",
-        "Cove Width and section shown with clear dimesnions",
-        "Cove levels Mentioned",
-        "Beam Locations Shown with clear dimensions",
-        "Wardrobe clash checked",
-        "Fan/light clash checked",
-        "AC clash checked",
+        "Cove Width and section shown with clear dimensions",
+        "Cove levels Mentioned on plan and matches with legends",
+        "Beam Locations hatch Shown ",
+        "Wardrobe height clash checked",
+        "AC location shown",
         "AC pelmet/pocket marked with clear dimensions",
         "Curtain Pelmet/pocket marked with clear dimensions"
 
-    ],
+    ]},
 
     Pelmet: [
 
@@ -157,22 +286,49 @@ pcc: [
 
     ],
 
-    electricalCeiling: [
-        "All new Fixtures (lights,fan,sprinklers, smoke detectors (etc)) shown in layout in plan",
-        "All Fixtures (lights,fan,sprinklers, smoke detectors (etc)) relocations shown(if any) shown in plan",
-        "Modules shown in the layout for looping",
+    electricalCeiling_lights_fullhome:
+    {drawingLevel : "FULL_HOME",
+     checklist :
+        [
+        "New light Fixtures shown in layout in plan",
+        "Existing light Fixtures relocations shown(if any) shown in plan",
+        "Light dimension with nearby fan/utilities Shown in plan",
+        "Modules shown in the plan layout for looping along with 5/15 Amp socket(s)",
         "Primary Looping Shown with modules with color code",
         "Secondary Looping Shown with primary points with color code",
         "Cove light/track light/profile light clear dimensions shown",
         "Cove light/track light/profile light xy coordinate shown",
         "Cove light shown in the false ceiling section",
-        "All Fixtures Locations and dimensions Shown in plan",
-        "All Fixture c/c Spacing and xy coordinates mentioned",
+        "Light fixture xy cooridinates shown",
+        "Light Fixture c/c Spacing and xy coordinates mentioned",
+        "Sprinklers route and smoke detector shown and clash checked(if any)",  
+        "Wardrobe area hatch shown and clash checked",
+        "Bed location /area hacth shown and clash checked",
+        "Fan & light clash checked for shodow effect",
         "All Fixture Legend shown"
 
-    ],
+    ]},
 
-    kitchenplumbing: [
+     electricalCeiling_fan_fullhome:
+    {drawingLevel : "FULL_HOME",
+     checklist :
+        [
+        "Fan(s) xy co-ordinates location and blade diameter shown in plan",
+         "Existing Fan relocation shown with color codes with dimensions",   
+        "Fan(s) Looping Shown with modules with color code in plan"
+        "Fan dimension with nearby lights/utilities Shown in plan",
+        "Wardrobe area hatch shown and clash checked in plan",
+        "Bed or loose furniture location /area hacth shown and clash checked",
+        "Fan & nearby light clash checked for shodow effect",
+        "All Fixture Legend shown"
+
+    ]},
+
+
+    
+    kitchenplumbing:{
+        drawingLevel : "ROOM",
+        checklist : [
 
         "Plan Layout shown with dimensions",
         "Elevation Layout shown with dimensions",
@@ -184,8 +340,11 @@ pcc: [
         "Drain Points Shown on plan wiyh xy co-ordinats",
         "Waterproofing area Shown on floor and wall"
 
-    ],
-     bathroomplumbing: [
+    ]},
+    
+     bathroomplumbing: {
+         drawingLevel : "ROOM",
+         checklist : [
 
         "Plan Layout shown with dimensions",
         "Elevation Layout shown with dimensions",
@@ -200,9 +359,12 @@ pcc: [
         "Vanity/furniture clash checked",
         "Fixture heights are as per interior standards"
 
-    ],
+    ]},
 
-    painting: [
+    painting_fullhouse:{
+        drawingLevel : "FULL_HOUSE",
+        checklist :
+        [
 
         "Paint Layout shown in plan with dimensions",
         "Elevation Layout Available",
@@ -211,9 +373,26 @@ pcc: [
         "Geometric/multicolor/block paint elevation shown with dimensions",
         "Texture paint elevation shown with dimensions"
 
-    ],
+    ]},
+ painting_roomwise:{
+        drawingLevel : "FULL_HOUSE",
+        checklist :
+        [
 
-    cat3: [
+        "Paint Layout shown in plan with dimensions",
+        "Elevation Layout Available",
+        "Paint Area Identified",
+        "Paint type  specification/type Mentioned",
+        "Geometric/multicolor/block paint elevation shown with dimensions",
+        "Texture paint elevation shown with dimensions"
+
+    ]},
+
+
+    
+    cat3:{
+        drawingLevel  : "ROOM",
+        checklist :[
 
         "Product Layout Available",
         "Elevation Available",
@@ -224,14 +403,16 @@ pcc: [
         "Installation Details Available",
         "Accessory Details Available"
 
-    ],
+    ]},
 
 
     // =====================================
     // NEW DOOR / DOOR REFURBISHMENT
     // =====================================
 
-    Doors: [
+    Doors: 
+    {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available with location shown in furniture layout",
         "Front and back Elevation Available",
@@ -249,13 +430,14 @@ pcc: [
         "Finish Type Mentioned for door along with design elements mentioned",
         "Finish Code Mentioned",
         "Accesibility checked (not clashing with existing furniture, fixtures or creating space constraints)"
-    ],
+    ]},
 
     // =====================================
     // SLIDING DOOR
     // =====================================
 
-    slidingDoor: [
+    slidingDoor: {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available with location shown in furniture layout",
         "Front and back Elevation Available",
@@ -277,13 +459,14 @@ pcc: [
         "Glass Thickness Mentioned",
         "Glass Colour Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // UPVC WINDOW
     // =====================================
 
-    upvcWindow: [
+    upvcWindow: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation Available",
         "Section Available",
@@ -305,13 +488,14 @@ pcc: [
 
         "Accessories Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // ALUMINIUM WINDOW
     // =====================================
 
-    aluminiumWindow: [
+    aluminiumWindow: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation Available",
         "Section Available",
@@ -333,13 +517,14 @@ pcc: [
 
         "Accessories Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // SHOE STORAGE
     // =====================================
 
-    shoeStorage: [
+    shoeStorage: {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available with location shown in furniture layout",
         "Elevation Available",
@@ -358,9 +543,11 @@ pcc: [
         "Fabric Code Mentioned",
         "Foam Density Mentioned"
 
-    ],
+    ]},
 
-        beds: [
+        beds: 
+    {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available with location shown in furniture layout",
         "Fornt and side Elevation Available",
@@ -374,9 +561,10 @@ pcc: [
         "All Finish Code Mentioned",
         "All hardware location and Details Mentioned"
 
-    ],
+    ]},
 
-      headboards: [
+      headboards: {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available with location shown in furniture layout",
         "Fornt Elevation Available",
@@ -390,13 +578,14 @@ pcc: [
         "All Finish Code (fabric, laminate etc) Mentioned",
         "Foam Density Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // ANY STORAGE
     // =====================================
 
-    anyStorages: [
+    anyStorages: {drawingLevel : "ROOM",
+        checklist :[
         "Plan Available with location shown in furniture layout",
         "Elevation Available",
         "Front and side Section Available (external and interal elevations)",
@@ -410,13 +599,14 @@ pcc: [
         "All Lock location and Details Mentioned",
         "All Handle locations and Details Mentioned",
          "All Hardware details mentioned"
-    ],
+    ]},
 
     // =====================================
     // TV UNIT
     // =====================================
 
-    tvUnit: [
+    tvUnit: {drawingLevel : "MANUAL",
+        checklist :[
 
         "Elevation Available",
         "Section Available",
@@ -433,13 +623,14 @@ pcc: [
 
         "Electrical Connections Shown"
 
-    ],
+    ]},
 
     // =====================================
     // MANDIR UNIT
     // =====================================
 
-   mandirUnit: [
+   mandirUnit: {drawingLevel : "MANUAL",
+        checklist :[
 
     "Furniture plan available and Mandir location clearly identified",
 
@@ -477,18 +668,21 @@ pcc: [
 
    
 
-],
+]},
 
     // =====================================
     // WALL PANELLING
     // =====================================
 
-    wallPanelling: [
+    wallPanelling: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation shown with dimensions",
         "Section shown with dimensions",
+        "Top view shown with dimensions",
         "Lenght, width and dept of panelling mentioned",
         "Any designs on Panelling like groove,T patti shown with dimensions",
+        "Curved design radius and arc dimensions mentioned",
         "Material Mentioned with specification(thickness, type)",
         "Laminate Code Mentioned",
         "Both Side Elevations Available",
@@ -496,13 +690,14 @@ pcc: [
         "Covelight shown along with electrical provision",
         "Skirting Interface Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // MIRROR PANELLING
     // =====================================
 
-    mirrorPanelling: [
+    mirrorPanelling: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation Available",
         "Section Available",
@@ -514,13 +709,14 @@ pcc: [
         "Backing Thickness Mentioned",
         "All Dimensions Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // VANITY UNIT
     // =====================================
 
-    vanityUnit: [
+    vanityUnit: {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan shown with location shown in furniture layout",
         "Elevation shown with external and internal elevation",
@@ -542,13 +738,14 @@ pcc: [
         "All Handle locations and Details Mentioned",
          "Any other Hardware details mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // LEDGES
     // =====================================
 
-    ledges: [
+    ledges: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation Available",
         "Plan Available",
@@ -558,15 +755,17 @@ pcc: [
         "Bracket Details Mentioned",
         "Shelf Spacing Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // WOODEN PARTITION
     // =====================================
 
-    woodenPartition: [
+    woodenPartition: {drawingLevel : "ROOM",
+        checklist :[
 
         "Elevation Available",
+            "Top view shown with dimensions",
         "Rafter Size Mentioned",
         "Rafter Material Mentioned",
         "Finish Type Mentioned",
@@ -575,13 +774,15 @@ pcc: [
         "Ceiling Fixing Mentioned",
         "Rafter Spacing Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // WOODEN PELMET
     // =====================================
 
-    woodenPelmet: [
+    woodenPelmet: 
+        {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available",
         "Front Elevation Available",
@@ -594,13 +795,14 @@ pcc: [
         "Pelmet Depth Mentioned",
         "Pelmet Height Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // PLY BOXING
     // =====================================
 
-    plyBoxing: [
+    plyBoxing: {drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available",
         "Front Elevation Available",
@@ -613,33 +815,38 @@ pcc: [
         "Boxing Depth Mentioned",
         "Boxing Height Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // TRIMS
     // =====================================
 
-    TrimsorMouldings: [
+    TrimsorMouldings: {drawingLevel : "ROOM",
+        checklist :[
 
-        "Elevation Available",
+        "Elevation Available with dimensions",
         "Trim/Moulding Profile Mentioned",
         "Trim/Moulding Size Mentioned",
         "Trim/Moulding Material Mentioned",
         "Finish Type Mentioned",
-        "Paint Or Polish Mentioned",
         "Trim/Moulding Spacing Mentioned",
         "Trim/Mouldings dimensions Mentioned",
         "Trims/Mouldings curved design radius and dimensions mentioned",
         "Starting Point xy co ordinates Mentioned",
+        "Loose furniture hatching shown and clash checked",
+        "Any modules clash checked",
+        "Any wall light points shown with dimensions",
         "Wall Offset Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // SAFETY DOOR
     // =====================================
 
-    safetyDoor: [
+    safetyDoor: 
+{drawingLevel : "ROOM",
+        checklist :[
 
         "Plan Available",
         "Elevation Available",
@@ -654,13 +861,15 @@ pcc: [
         "Lock location Mentioned",
         "Handle location Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // WINDOW GRILLS
     // =====================================
 
-    windowGrills: [
+    windowGrills: {drawingLevel : "ROOM",
+        checklist :[
+
 
         "Elevation Available",
         "Grill Layout Available",
@@ -679,19 +888,22 @@ pcc: [
 
         "Paint Code Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // METAL DESIGN ELEMENTS
     // =====================================
 
-    metalDesignElements: [
+    metalDesignElements: {drawingLevel : "ROOM",
+        checklist :[
+
 
         "Plan Available",
 
         "Elevation Available",
 
         "Section Available",
+            "Top view shown",
 
         "Dimensions Mentioned",
 
@@ -707,13 +919,15 @@ pcc: [
 
         "Installation Details Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // MS SHED
     // =====================================
 
-    msShed: [
+    msShed: {drawingLevel : "ROOM",
+        checklist :[
+
 
         "Plan Available",
 
@@ -739,13 +953,15 @@ pcc: [
 
         "Fixing Details Mentioned"
 
-    ],
+    ]},
 
     // =====================================
     // PERGOLA
     // =====================================
 
-    pergola: [
+    pergola: {drawingLevel : "ROOM",
+        checklist :[
+
 
         "Plan Available",
 
@@ -769,7 +985,7 @@ pcc: [
 
         "Fixing Details Mentioned"
 
-    ]
+    ]}
 
 
     

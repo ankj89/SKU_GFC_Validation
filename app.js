@@ -659,7 +659,7 @@ function saveCurrentValidation(showMessage = true){
         new Date().toISOString()
 
 };
-
+learnDrawing(record);
    saveCurrentSKUValidation(record);
 
    if(showMessage){

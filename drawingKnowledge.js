@@ -114,7 +114,65 @@ function learnDrawing(record){
 // PREDICT
 // =====================================
 
+// =====================================
+// PREDICT
+// =====================================
+
 function predictDrawing(currentSKU){
+
+    if(!currentSKU){
+
+        return null;
+
+    }
+
+    // -----------------------------
+    // STEP 1 : Already learnt SKU ?
+    // -----------------------------
+
+    const skuInfo =
+
+        drawingKnowledge.skuMap[
+            currentSKU.item
+        ];
+
+    if(skuInfo){
+
+        return{
+
+            page: skuInfo.page,
+
+            category: skuInfo.category,
+
+            source: "SKU"
+
+        };
+
+    }
+
+    // -----------------------------
+    // STEP 2 : Room prediction
+    // -----------------------------
+
+    const roomInfo =
+
+        drawingKnowledge.roomPageMap[
+            currentSKU.room
+        ];
+
+    if(roomInfo){
+
+        return{
+
+            page: roomInfo.page,
+
+            category: null,
+
+            source: "ROOM"
+
+        };
+
+    }
 
     return null;
 

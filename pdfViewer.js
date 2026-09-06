@@ -166,6 +166,7 @@ pdfCanvas.style.height =
         pageNumber
     );
 
+    updateThumbnailHighlight();
 }
 
 // =========================================

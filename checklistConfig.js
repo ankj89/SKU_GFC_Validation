@@ -356,7 +356,7 @@ pcc_roomwise:
         [
         "Fan(s) xy co-ordinates location and blade diameter shown in plan",
          "Existing Fan relocation shown with color codes with dimensions",   
-        "Fan(s) Looping Shown with modules with color code in plan"
+        "Fan(s) Looping Shown with modules with color code in plan",
         "Fan dimension with nearby lights/utilities Shown in plan",
         "Wardrobe area hatch shown and clash checked in plan",
         "Bed or loose furniture location /area hacth shown and clash checked",

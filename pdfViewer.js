@@ -629,43 +629,43 @@ async function generateThumbnails(){
             "thumbnailPanel"
         );
 
-    panel.innerHTML="";
+    panel.innerHTML = "";
 
-    thumbnailCanvases=[];
+    thumbnailCanvases = [];
 
     for(
 
-        let i=1;
+        let i = 1;
 
-        i<=pdfDoc.numPages;
+        i <= pdfDocument.numPages;
 
         i++
 
     ){
 
         const page =
-            await pdfDoc.getPage(i);
+            await pdfDocument.getPage(i);
 
         const viewport =
             page.getViewport({
+
                 scale:0.18
+
             });
 
         const wrapper =
             document.createElement("div");
 
-        wrapper.className="thumbnail";
+        wrapper.className = "thumbnail";
 
-        wrapper.dataset.page=i;
+        wrapper.dataset.page = i;
 
         const canvas =
             document.createElement("canvas");
 
-        canvas.width=
-            viewport.width;
+        canvas.width = viewport.width;
 
-        canvas.height=
-            viewport.height;
+        canvas.height = viewport.height;
 
         await page.render({
 
@@ -678,11 +678,11 @@ async function generateThumbnails(){
 
         wrapper.appendChild(canvas);
 
-        wrapper.onclick=()=>{
+        wrapper.onclick = async ()=>{
 
-            currentPage=i;
+            currentPageNumber = i;
 
-            renderPage(currentPage);
+            await renderPage(currentPageNumber);
 
         };
 
@@ -708,10 +708,7 @@ function updateThumbnailHighlight(){
         thumbnailCanvases.find(
 
             t=>
-
-            Number(
-                t.dataset.page
-            )===currentPage
+Number(t.dataset.page)===currentPageNumber
 
         );
 
@@ -768,8 +765,6 @@ document
 
     zoomLevel += 0.25;
 
-renderPage(currentPageNumber);
-
 document.getElementById("zoomPercent").innerText =
     Math.round(zoomLevel * 100) + "%";
 
@@ -786,7 +781,7 @@ document
     zoomLevel - 0.25
 );
 
-renderPage(currentPageNumber);
+
 
 document.getElementById("zoomPercent").innerText =
     Math.round(zoomLevel * 100) + "%";
@@ -801,7 +796,7 @@ document
 
   zoomLevel = 1;
 
-renderPage(currentPageNumber);
+
 
 document.getElementById("zoomPercent").innerText = "100%";
 

@@ -9,7 +9,7 @@ let currentPageNumber = 1;
 let totalPages = 0;
 let fitScale = 1;
 let zoomLevel = 1;
-
+let thumbnailCanvases = [];
 // =========================================
 // DOM
 // =========================================
@@ -71,7 +71,7 @@ async function loadPDF(
 
         totalPages =
             pdfDocument.numPages;
-
+generateThumbnails();
         currentPageNumber = 1;
 
         updatePageIndicators();
@@ -620,6 +620,117 @@ window.showPDFState =
         });
 
     };
+
+async function generateThumbnails(){
+
+    const panel =
+        document.getElementById(
+            "thumbnailPanel"
+        );
+
+    panel.innerHTML="";
+
+    thumbnailCanvases=[];
+
+    for(
+
+        let i=1;
+
+        i<=pdfDoc.numPages;
+
+        i++
+
+    ){
+
+        const page =
+            await pdfDoc.getPage(i);
+
+        const viewport =
+            page.getViewport({
+                scale:0.18
+            });
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className="thumbnail";
+
+        wrapper.dataset.page=i;
+
+        const canvas =
+            document.createElement("canvas");
+
+        canvas.width=
+            viewport.width;
+
+        canvas.height=
+            viewport.height;
+
+        await page.render({
+
+            canvasContext:
+                canvas.getContext("2d"),
+
+            viewport
+
+        }).promise;
+
+        wrapper.appendChild(canvas);
+
+        wrapper.onclick=()=>{
+
+            currentPage=i;
+
+            renderPage(currentPage);
+
+        };
+
+        panel.appendChild(wrapper);
+
+        thumbnailCanvases.push(wrapper);
+
+    }
+
+    updateThumbnailHighlight();
+
+}
+
+function updateThumbnailHighlight(){
+
+    thumbnailCanvases.forEach(t=>{
+
+        t.classList.remove("active");
+
+    });
+
+    const active =
+        thumbnailCanvases.find(
+
+            t=>
+
+            Number(
+                t.dataset.page
+            )===currentPage
+
+        );
+
+    if(active){
+
+        active.classList.add("active");
+
+        active.scrollIntoView({
+
+            block:"nearest"
+
+        });
+
+    }
+
+}
+
+
+
+
 
 // =========================================
 // PDF UPLOAD EVENT

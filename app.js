@@ -108,6 +108,7 @@ function loadQueueItem(index){
     currentSKU = validationQueue[index];
 
     renderCurrentSKU();
+    applyPrediction();
 
     updateWindowTitle();
 
@@ -333,6 +334,40 @@ document
     }
 
 );
+
+function applyPrediction(){
+
+    if(!currentSKU){
+
+        return;
+
+    }
+
+    const prediction =
+
+        predictDrawing(currentSKU);
+
+    if(!prediction){
+
+        return;
+
+    }
+
+    // Drawing Page
+
+    document
+        .getElementById("drawingPage")
+        .value =
+            prediction.page;
+
+    // Visual indication
+
+    document
+        .getElementById("drawingPage")
+        .classList
+        .add("suggested");
+
+}
 
 
 // =====================================

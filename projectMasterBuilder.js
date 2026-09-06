@@ -279,6 +279,12 @@ validationQueue
     
 };
 
+    if (typeof resetDrawingKnowledge === "function") {
+
+    resetDrawingKnowledge();
+
+}
+
 console.log(
     projectMaster
 );

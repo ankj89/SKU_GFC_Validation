@@ -767,3 +767,31 @@ document.getElementById("zoomResetBtn").innerText = "100%";
     await renderPage(currentPageNumber);
 
 });
+
+// =====================================
+// OPEN PDF PAGE
+// =====================================
+
+async function goToPDFPage(pageNo){
+
+    if(
+        !pdfDocument ||
+        !pageNo
+    ){
+        return;
+    }
+
+    pageNo = Number(pageNo);
+
+    if(
+        pageNo < 1 ||
+        pageNo > pdfDocument.numPages
+    ){
+        return;
+    }
+
+    currentPageNumber = pageNo;
+
+    await renderPage(currentPageNumber);
+
+}

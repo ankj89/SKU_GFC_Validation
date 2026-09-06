@@ -1186,3 +1186,11 @@ document
     "change",
     toggleDrawingFound
 );
+
+document
+.getElementById("drawingPage")
+.addEventListener("input",function(){
+
+    this.classList.remove("suggested");
+
+});

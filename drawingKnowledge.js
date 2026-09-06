@@ -35,3 +35,27 @@ function getDrawingKnowledge(){
     return drawingKnowledge;
 
 }
+
+// =====================================
+// LEARN
+// =====================================
+
+function learnDrawing(record){
+
+    if(!record){
+        return;
+    }
+
+    // Will be implemented next
+
+}
+
+// =====================================
+// PREDICT
+// =====================================
+
+function predictDrawing(currentSKU){
+
+    return null;
+
+}

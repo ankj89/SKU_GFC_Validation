@@ -101,7 +101,7 @@ function updateQueueNavigator(){
 // LOAD CURRENT SKU
 // =====================================
 
-function loadQueueItem(index){
+async function loadQueueItem(index){
 
     currentQueueIndex = index;
 
@@ -335,7 +335,7 @@ document
 
 );
 
-function applyPrediction(){
+async function applyPrediction(){
 
     if(!currentSKU){
         return;
@@ -365,7 +365,7 @@ function applyPrediction(){
         .classList
         .add("suggested");
 
-    goToPDFPage(prediction.page);
+    await goToPDFPage(prediction.page);
 
     showPredictionMessage(prediction);
 

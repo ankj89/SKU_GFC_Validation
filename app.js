@@ -224,7 +224,7 @@ function renderCurrentSKU(){
     renderSelectedCategories();
 
     generateChecklist();
-    Validation();
+    loadExistingValidation();
 
 }
 

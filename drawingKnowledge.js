@@ -1,6 +1,23 @@
 // =====================================
 // DRAWING KNOWLEDGE ENGINE
 // =====================================
+function getLearningKey(item){
+
+    if(!item){
+        return "";
+    }
+
+    return item
+
+        .replace(/\[.*?\]/g,"")
+
+        .replace(/\s+/g," ")
+
+        .trim()
+
+        .toLowerCase();
+
+}
 
 let drawingKnowledge = {
 
@@ -25,19 +42,7 @@ function resetDrawingKnowledge(){
     };
 
 }
-function getLearningKey(item){
 
-    if(!item){
-        return "";
-    }
-
-    return item
-        .replace(/\[.*?\]/g,"")   // remove [XXXX]
-        .replace(/\s+/g," ")      // normalize spaces
-        .trim()
-        .toLowerCase();
-
-}
 // =====================================
 // GET
 // =====================================

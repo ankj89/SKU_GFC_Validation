@@ -338,37 +338,36 @@ document
 function applyPrediction(){
 
     if(!currentSKU){
-
         return;
+    }
 
+    // Already validated?
+    const saved =
+        getValidation(currentSKU.id);
+
+    // If page already exists, do nothing.
+    if(saved && saved.drawingPage){
+        return;
     }
 
     const prediction =
         predictDrawing(currentSKU);
 
     if(!prediction){
-
         return;
-
     }
 
-    document
-        .getElementById("drawingPage")
-        .value =
-            prediction.page;
+    document.getElementById("drawingPage").value =
+        prediction.page;
 
     document
         .getElementById("drawingPage")
         .classList
         .add("suggested");
 
-    goToPDFPage(
-        prediction.page
-    );
+    goToPDFPage(prediction.page);
 
-    showPredictionMessage(
-        prediction
-    );
+    showPredictionMessage(prediction);
 
 }
 

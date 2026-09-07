@@ -25,7 +25,19 @@ function resetDrawingKnowledge(){
     };
 
 }
+function getLearningKey(item){
 
+    if(!item){
+        return "";
+    }
+
+    return item
+        .replace(/\[.*?\]/g,"")   // remove [XXXX]
+        .replace(/\s+/g," ")      // normalize spaces
+        .trim()
+        .toLowerCase();
+
+}
 // =====================================
 // GET
 // =====================================
@@ -78,13 +90,17 @@ function learnDrawing(record){
 
     if(level==="FULL_HOME"){
 
-        drawingKnowledge.skuMap[record.item]={
+        const key = getLearningKey(record.item);
 
-            page:Number(record.drawingPage),
+drawingKnowledge.skuMap[key] = {
 
-            category
+    page: Number(record.drawingPage),
 
-        };
+    category,
+
+    updatedOn: new Date().toISOString()
+
+};
 
     }
 
@@ -130,11 +146,10 @@ function predictDrawing(currentSKU){
     // STEP 1 : Already learnt SKU ?
     // -----------------------------
 
-    const skuInfo =
+const key = getLearningKey(currentSKU.item);
 
-        drawingKnowledge.skuMap[
-            currentSKU.item
-        ];
+const skuInfo =
+    drawingKnowledge.skuMap[key];
 
     if(skuInfo){
 

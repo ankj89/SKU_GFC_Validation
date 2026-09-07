@@ -3,7 +3,7 @@
 // =========================================
 
 let pdfDocument = null;
-
+let renderTask = null;
 let currentPageNumber = 1;
 
 let totalPages = 0;
@@ -151,14 +151,37 @@ pdfCanvas.style.width =
 
 pdfCanvas.style.height =
     viewport.height + "px";
-    await page.render({
+    if(renderTask){
 
-        canvasContext:
-            pdfContext,
+    renderTask.cancel();
+
+}
+
+renderTask =
+    page.render({
+
+        canvasContext: pdfContext,
 
         viewport
 
-    }).promise;
+    });
+
+try{
+
+    await renderTask.promise;
+
+}
+catch(err){
+
+    if(err.name !== "RenderingCancelledException"){
+
+        throw err;
+
+    }
+
+}
+
+renderTask = null;
 
     updatePageIndicators();
 

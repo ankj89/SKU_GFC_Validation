@@ -1333,12 +1333,19 @@ document
     });
 
 });
+
 document
-.getElementById("drawingStatus")
-.addEventListener(
-    "change",
-    toggleDrawingFound
-);
+.querySelectorAll(
+    'input[name="drawingStatus"]'
+)
+.forEach(radio => {
+
+    radio.addEventListener(
+        "change",
+        toggleDrawingStatus
+    );
+
+});
 
 document
 .getElementById("drawingPage")

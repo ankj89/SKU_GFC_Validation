@@ -749,12 +749,10 @@ missingElevation:
 
     savedOn:
         new Date().toISOString()
-console.log(
-    "CHECKLIST SAVED",
-    collectChecklist()
-);
+
    
 };
+    
 learnDrawing(record);
    saveCurrentSKUValidation(record);
     

@@ -177,88 +177,46 @@ function addQtyValidationSheet(
 // VALIDATION FINDINGS
 // =====================================
 
-function addValidationSheet(
-    workbook
-) {
+function addValidationSheet(workbook){
 
-    const data = [[
-
-        "Page",
+    const data=[[
         "Room",
-        "Drawing Category",
-        "Findings / Remarks",
+        "SKU",
+        "Drawing Page",
+        "Elevation No",
+        "Qty Validation",
+        "Category Validation",
         "Overall Remarks"
-
     ]];
 
-    validationStore.forEach(row => {
-
-        const findings = [];
-
-        const absentItems =
-
-            (row.checklist || [])
-            .filter(
-                item =>
-                    item.status === "Absent"
-            );
-
-        if (
-            absentItems.length
-        ) {
-
-            findings.push(
-                "Absent Items:"
-            );
-
-            absentItems.forEach(item => {
-
-                if (
-                    item.remark &&
-                    item.remark.trim()
-                ) {
-
-                    findings.push(
-                        `• ${item.title} : ${item.remark}`
-                    );
-
-                } else {
-
-                    findings.push(
-                        `• ${item.title}`
-                    );
-
-                }
-
-            });
-
-        }
+    validationStore
+    .filter(r=>r.drawingStatus==="FOUND")
+    .forEach(record=>{
 
         data.push([
 
-            row.pageNo,
+            record.room,
 
-            row.room,
+            record.item,
 
-            (row.categories || [])
-                .join("\n"),
+            record.drawingPage || "",
 
-            findings.join("\n"),
+            record.elevationNo || "",
 
-            row.overallRemarks || ""
+            record.qtyValidation || "Pending",
+
+            buildCategoryValidationExcel(record),
+
+            record.overallRemarks || "-"
 
         ]);
 
     });
 
-    const sheet =
-        XLSX.utils.aoa_to_sheet(
-            data
-        );
+    const sheet=
+        XLSX.utils.aoa_to_sheet(data);
 
-    formatSheet(
-        sheet
-    );
+    formatSheet(sheet);
 
     XLSX.utils.book_append_sheet(
 
@@ -266,12 +224,43 @@ function addValidationSheet(
 
         sheet,
 
-        "GFC correction inputs"
+        "SKU Found"
 
     );
 
 }
 
+function buildCategoryValidationExcel(record){
+
+    const lines=[];
+
+    (record.checklist || []).forEach(item=>{
+
+        if(item.status!=="Absent"){
+            return;
+        }
+
+        lines.push("• "+item.title);
+
+        if(item.remark && item.remark.trim()){
+
+            lines.push("   Remarks : "+item.remark);
+
+        }
+
+        lines.push("");
+
+    });
+
+    if(lines.length===0){
+
+        return "OK";
+
+    }
+
+    return lines.join("\n");
+
+}
 // =====================================
 // ROOM COVERAGE
 // =====================================
@@ -342,52 +331,60 @@ formatSheet(
 // MISSING COVERAGE
 // =====================================
 
-function addMissingCoverageSheet(
-    workbook
-) {
+function addMissingCoverageSheet(workbook){
 
-    const missing =
-        getMissingSKUs();
+    const data=[[
+        "Room",
+        "SKU",
+        "Qty",
+        "Elevation Number",
+        "Action Required"
+    ]];
 
-    const data = [
-
-      [
-    "Qty",
-    "Item",
-    "Room"
-]
-
-    ];
-
-    missing.forEach(item => {
+    validationStore
+    .filter(r=>r.drawingStatus==="NOT_FOUND")
+    .forEach(record=>{
 
         data.push([
 
-            item.qty,
+            record.room,
 
-            item.item,
+            record.item,
 
-        item.room || ""
+            record.boqQty,
+
+            record.missingElevation || "",
+
+            record.missingRemarks || ""
 
         ]);
 
     });
 
-    const sheet =
+    if(data.length===1){
 
-        XLSX.utils.aoa_to_sheet(
-            data
-        );
-formatSheet(
-    sheet
-);
+        data.push([
+            "",
+            "No Missing Drawings",
+            "",
+            "",
+            ""
+        ]);
+
+    }
+
+    const sheet=
+        XLSX.utils.aoa_to_sheet(data);
+
+    formatSheet(sheet);
+
     XLSX.utils.book_append_sheet(
 
         workbook,
 
         sheet,
 
-        "SKUs drawings missing"
+        "SKU Not Found"
 
     );
 
@@ -397,36 +394,43 @@ formatSheet(
 // BOQ MISMATCH
 // =====================================
 
-function addMismatchSheet(
-    workbook
-) {
+function addMismatchSheet(workbook){
 
-    const data = [
+    const data=[[
+        "Drawing Page",
+        "Room",
+        "Description",
+        "Action Required"
+    ]];
 
-        [
-            "Page",
-            "Item",
-            "Reason"
-        ]
+    /*
+        Future:
 
-    ];
+        extraItemsStore.forEach(item=>{
 
+            data.push([
+                item.page,
+                item.room,
+                item.description,
+                item.action
+            ]);
 
-    const sheet =
+        });
 
-        XLSX.utils.aoa_to_sheet(
-            data
-        );
-formatSheet(
-    sheet
-);
+    */
+
+    const sheet=
+        XLSX.utils.aoa_to_sheet(data);
+
+    formatSheet(sheet);
+
     XLSX.utils.book_append_sheet(
 
         workbook,
 
         sheet,
 
-        "Items to be removed from GFC"
+        "Extra Items"
 
     );
 
@@ -586,30 +590,27 @@ return text
     .replace(/_x000D_/g, "");
 }
 
+function formatSheet(sheet){
 
-function formatSheet(sheet) {
+    sheet["!cols"]=[
 
-    sheet["!cols"] = [
-
-        { wch: 8 },    // Page
-        { wch: 20 },   // Room
-        { wch: 25 },   // Category
-        { wch: 90 },   // Findings
-        { wch: 50 }    // Overall Remarks
+        {wch:20},   // Room
+        {wch:55},   // SKU
+        {wch:12},   // Drawing Page
+        {wch:15},   // Elevation
+        {wch:25},   // Qty Validation
+        {wch:60},   // Category Validation
+        {wch:40}    // Overall Remarks
 
     ];
 
-    sheet["!rows"] = [];
+    sheet["!rows"]=[];
 
-    for (
-        let i = 0;
-        i < 1000;
-        i++
-    ) {
+    for(let i=0;i<1000;i++){
 
         sheet["!rows"].push({
 
-            hpt: 50
+            hpt:70
 
         });
 

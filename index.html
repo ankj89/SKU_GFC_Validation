@@ -333,27 +333,9 @@
 
            <hr>
 
-<label>Drawing Page</label>
+            
 
-<input
-    type="number"
-    id="drawingPage">
-<div
-    id="predictionMessage"
-    class="prediction-message">
-</div>
-<label>Elevation Number</label>
-
-<input
-    type="text"
-    id="elevationNo"
-    placeholder="Eg. E1 / E2 / TV Wall / Section A">
-
-<label>Visible Qty in GFC</label>
-
-<input
-    type="number"
-    id="gfcQty">
+<hr>
 
 <label>
 
@@ -366,28 +348,63 @@
 
 </label>
 
-<div id="drawingMissingPanel" class="hidden">
+<!-- ========================= -->
+<!-- FOUND PANEL -->
+<!-- ========================= -->
+
+<div id="drawingFoundSection">
+
+    <label>Drawing Page</label>
+
+    <input
+        type="number"
+        id="drawingPage">
+
+    <label>Elevation Number</label>
+
+    <input
+        type="text"
+        id="elevationNo">
+
+    <label>Visible Qty in GFC</label>
+
+    <input
+        type="number"
+        id="gfcQty">
+
+    <label>Qty Validation</label>
+
+    <input
+        id="qtyValidation"
+        readonly>
+
+</div>
+
+<!-- ========================= -->
+<!-- NOT FOUND PANEL -->
+<!-- ========================= -->
+
+<div
+    id="drawingMissingSection"
+    class="hidden">
 
     <label>
-        Item should be added in Elevation
+        Expected Elevation
     </label>
 
     <input
         type="text"
-        id="addElevation"
-        placeholder="Eg. Kitchen Elevation E2">
+        id="missingElevation">
 
     <label>
-        Instruction to GFC Team
+        Action Required
     </label>
 
     <textarea
-        id="missingRemarks"
-        placeholder="Describe what needs to be added in GFC">
+        id="missingRemarks">
     </textarea>
 
 </div>
-
 
         
 <div id="jumpModal" class="jump-modal hidden">

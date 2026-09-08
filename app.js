@@ -731,9 +731,6 @@ missingElevation:
        
     overallRemarks:
         document.getElementById("overallRemarks").value,
-
-
-
     categories:
         JSON.parse(
             JSON.stringify(
@@ -741,12 +738,7 @@ missingElevation:
             )
         ),
 
-console.log(
-    "CHECKLIST SAVED",
-    collectChecklist()
-);
-       
-    checklist:
+ checklist:
         JSON.parse(
             JSON.stringify(
                 collectChecklist()
@@ -757,10 +749,15 @@ console.log(
 
     savedOn:
         new Date().toISOString()
-
+console.log(
+    "CHECKLIST SAVED",
+    collectChecklist()
+);
+   
 };
 learnDrawing(record);
    saveCurrentSKUValidation(record);
+    
 console.log("FULL RECORD", record);
 
    if(showMessage){

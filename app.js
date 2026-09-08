@@ -118,6 +118,13 @@ async function loadQueueItem(index){
 
 function openJumpModal(){
 
+    const modal = document.getElementById("jumpModal");
+const closeBtn = document.getElementById("closeJumpBtn");
+
+closeBtn.onclick = () => {
+    modal.classList.add("hidden");
+};
+
     const list =
         document.getElementById("jumpList");
 
@@ -1301,15 +1308,7 @@ document
 .getElementById("skuNavigator")
 .onclick=openJumpModal;
 
-document
-.getElementById("closeJumpBtn")
-.onclick=()=>{
 
-    document
-    .getElementById("jumpModal")
-    .classList.add("hidden");
-
-};
 
 document
 .getElementById("jumpSearch")

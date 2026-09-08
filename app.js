@@ -1116,19 +1116,7 @@ function checkCompletion(){
 
 }
 
-function toggleDrawingFound(){
 
-    const found =
-        document.getElementById("drawingFound").checked;
-
-    document
-        .getElementById("drawingMissingPanel")
-        .classList.toggle(
-            "hidden",
-            found
-        );
-
-}
 
 
 
@@ -1146,6 +1134,100 @@ saveCurrentValidation=function(show=true){
     checkCompletion();
 
 };
+
+function toggleDrawingFound(){
+
+    const found =
+        document.getElementById(
+            "drawingFound"
+        ).checked;
+
+    document
+        .getElementById(
+            "drawingFoundSection"
+        )
+        .classList
+        .toggle(
+            "hidden",
+            !found
+        );
+
+    document
+        .getElementById(
+            "drawingMissingSection"
+        )
+        .classList
+        .toggle(
+            "hidden",
+            found
+        );
+
+    document
+        .querySelector(
+            ".category-panel"
+        )
+        .classList
+        .toggle(
+            "hidden",
+            !found
+        );
+
+}
+
+document
+.getElementById("drawingFound")
+.addEventListener(
+    "change",
+    toggleDrawingFound
+);
+
+toggleDrawingFound();
+
+function updateQtyValidation(){
+
+    if(!currentSKU){
+        return;
+    }
+
+    const boq =
+        Number(currentSKU.qty);
+
+    const gfc =
+        Number(
+            document.getElementById("gfcQty").value || 0
+        );
+
+    let status="OK";
+
+    if(gfc<boq){
+
+        status="LOW";
+
+    }
+
+    else if(gfc>boq){
+
+        status="HIGH";
+
+    }
+
+    document
+        .getElementById("qtyValidation")
+        .value =
+
+        `BOQ:${boq} | GFC:${gfc} | ${status}`;
+
+}
+document
+.getElementById("gfcQty")
+.addEventListener(
+    "input",
+    updateQtyValidation
+);
+
+
+
+
 
 document
 .getElementById("prevSkuBtn")

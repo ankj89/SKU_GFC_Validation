@@ -215,9 +215,11 @@ function renderCurrentSKU(){
         "gfcQty"
     ).value="";
 
-    document.getElementById(
-        "drawingFound"
-    ).checked=true;
+    drawingStatus:
+
+document.querySelector(
+'input[name="drawingStatus"]:checked'
+)?.value || "",
 
     selectedCategoryBasket=[];
 
@@ -538,23 +540,35 @@ function loadExistingValidation(){
     document.getElementById("gfcQty").value =
         saved.gfcQty || "";
 
-    document.getElementById("drawingFound").checked =
-        saved.drawingFound ?? true;
+const radio = document.querySelector(
 
+`input[name="drawingStatus"][value="${saved.drawingStatus}"]`
+
+);
+
+if(radio){
+
+    radio.checked = true;
+
+}
+
+toggleDrawingStatus();
+    
     document.getElementById("overallRemarks").value =
         saved.overallRemarks || "";
     document.getElementById("elevationNo").value =
     saved.elevationNo || "";
 
-document.getElementById("addElevation").value =
-    saved.addElevation || "";
+document.getElementById("qtyValidation").value =
+    saved.qtyValidation || "";
+
+document.getElementById("missingElevation").value =
+    saved.missingElevation || "";
 
 document.getElementById("missingRemarks").value =
     saved.missingRemarks || "";
 
-
-toggleDrawingFound();
-
+    
     selectedCategoryBasket =
 
         JSON.parse(
@@ -687,8 +701,12 @@ function saveCurrentValidation(showMessage = true){
 
     category: currentSKU.category,
 
-    drawingFound:
-        document.getElementById("drawingFound").checked,
+  drawingStatus:
+
+document.querySelector(
+'input[name="drawingStatus"]:checked'
+)?.value || "",
+    
 
     drawingPage:
         document.getElementById("drawingPage").value,
@@ -699,13 +717,17 @@ function saveCurrentValidation(showMessage = true){
     gfcQty:
         document.getElementById("gfcQty").value,
        
-       addElevation:
-        document.getElementById("addElevation").value,
+    
 
     missingRemarks:
         document.getElementById("missingRemarks").value,
 
+qtyValidation:
+    document.getElementById("qtyValidation").value,
 
+missingElevation:
+    document.getElementById("missingElevation").value,
+       
     overallRemarks:
         document.getElementById("overallRemarks").value,
 
@@ -936,6 +958,11 @@ function clearValidationForm(){
 
     const drawingPage =
         document.getElementById("drawingPage");
+    const elevation =
+    document.getElementById("elevationNo");
+
+if(elevation)
+    elevation.value="";
 
     if(drawingPage)
         drawingPage.value="";
@@ -952,19 +979,29 @@ function clearValidationForm(){
     if(remarks)
         remarks.value="";
 
-    const drawingFound =
-        document.getElementById("drawingFound");
+    // Clear Drawing Status selection
+    document
+    .querySelectorAll(
+        'input[name="drawingStatus"]'
+    )
+    .forEach(r => r.checked = false);
 
-    if(drawingFound)
-        drawingFound.checked=true;
+    // Clear new fields
+    document.getElementById("qtyValidation").value = "";
 
-    selectedCategoryBasket=[];
+    document.getElementById("missingElevation").value = "";
+
+    document.getElementById("missingRemarks").value = "";
+
+    // Update UI
+    toggleDrawingStatus();
+
+    // Clear categories
+    selectedCategoryBasket = [];
 
     renderSelectedCategories();
 
     generateChecklist();
-
-    
 
 }
 
@@ -1135,53 +1172,50 @@ saveCurrentValidation=function(show=true){
 
 };
 
-function toggleDrawingFound(){
+function toggleDrawingStatus(){
 
-    const found =
-        document.getElementById(
-            "drawingFound"
-        ).checked;
+    const status =
+        document.querySelector(
+            'input[name="drawingStatus"]:checked'
+        )?.value;
 
     document
-        .getElementById(
-            "drawingFoundSection"
-        )
-        .classList
-        .toggle(
+        .getElementById("foundSection")
+        .classList.toggle(
             "hidden",
-            !found
+            status!=="FOUND"
         );
 
     document
-        .getElementById(
-            "drawingMissingSection"
-        )
-        .classList
-        .toggle(
+        .getElementById("notFoundSection")
+        .classList.toggle(
             "hidden",
-            found
+            status!=="NOT_FOUND"
         );
 
     document
-        .querySelector(
-            ".category-panel"
-        )
-        .classList
-        .toggle(
+        .querySelector(".category-panel")
+        .classList.toggle(
             "hidden",
-            !found
+            status!=="FOUND"
         );
 
 }
 
 document
-.getElementById("drawingFound")
-.addEventListener(
-    "change",
-    toggleDrawingFound
-);
+.querySelectorAll(
+    'input[name="drawingStatus"]'
+)
+.forEach(r=>{
 
-toggleDrawingFound();
+    r.addEventListener(
+        "change",
+        toggleDrawingStatus
+    );
+
+});
+
+toggleDrawingStatus();
 
 function updateQtyValidation(){
 
@@ -1300,7 +1334,7 @@ document
 
 });
 document
-.getElementById("drawingFound")
+.getElementById("drawingStatus")
 .addEventListener(
     "change",
     toggleDrawingFound

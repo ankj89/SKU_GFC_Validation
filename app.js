@@ -380,9 +380,13 @@ function showPredictionMessage(prediction){
             "predictionMessage"
         );
 
+    if(!div){
+        return;
+    }
+
     if(!prediction){
 
-        div.innerHTML="";
+        div.innerHTML = "";
 
         return;
 
@@ -390,14 +394,14 @@ function showPredictionMessage(prediction){
 
     if(prediction.source==="SKU"){
 
-        div.innerHTML=
+        div.innerHTML =
             "💡 Suggested from previous validation of the same SKU";
 
     }
 
     else if(prediction.source==="ROOM"){
 
-        div.innerHTML=
+        div.innerHTML =
             "💡 Suggested from latest drawing of this room";
 
     }

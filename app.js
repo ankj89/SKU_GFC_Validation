@@ -582,49 +582,71 @@ function restoreChecklist(saved){
 
     saved.checklist.forEach(item=>{
 
-        const rows =
-            document.querySelectorAll(
-                ".checklist-item"
-            );
+        let wrapper = null;
 
-        rows.forEach(row=>{
+        // NEW METHOD
+        if(item.id){
 
-            const title=
+            const radios =
+                document.getElementsByName(item.id);
 
-                row.querySelector(
-                    ".checklist-title"
-                ).innerText;
+            if(radios.length){
 
-            if(title!==item.title){
-                return;
+                radios.forEach(r=>{
+
+                    r.checked =
+                        (r.value===item.status);
+
+                });
+
+                wrapper =
+                    radios[0].closest(".checklist-item");
+
             }
 
-            row
-            .querySelectorAll(
-                'input[type="radio"]'
-            )
-            .forEach(r=>{
+        }
 
-                r.checked=
+        // OLD METHOD (fallback)
+        if(!wrapper){
 
-                    r.value===item.status;
+            document
+            .querySelectorAll(".checklist-item")
+            .forEach(row=>{
+
+                const title =
+                    row.querySelector(".checklist-title")
+                    .innerText
+                    .trim();
+
+                if(title===item.title?.trim()){
+
+                    row.querySelectorAll(
+                        'input[type="radio"]'
+                    ).forEach(r=>{
+
+                        r.checked =
+                            (r.value===item.status);
+
+                    });
+
+                    wrapper = row;
+
+                }
 
             });
 
-            row
-            .querySelector(
-                ".item-remark"
-            )
-            .value=
+        }
 
-                item.remark;
+        if(wrapper){
 
-        });
+            wrapper.querySelector(".item-remark").value =
+                item.remark || "";
+
+        }
 
     });
 
 }
-
 
 // =====================================
 // UPDATE CURRENT SKU PANEL

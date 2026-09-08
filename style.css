@@ -565,21 +565,14 @@ header h1{
 
 .category-panel{
 
-    background:#fff;
-
-    border:1px solid #ddd;
-
-    border-radius:8px;
-
-    padding:15px;
-
-   display:flex;
+    display:flex;
 
     flex-direction:column;
 
-    min-height:0;
+    height:calc(100vh - 360px);
 
 }
+
 .category-panel h2{
 
     margin-bottom:15px;
@@ -680,8 +673,6 @@ header h1{
 
     overflow-y:auto;
 
-    padding-right:8px;
-
     min-height:0;
 
 }
@@ -707,6 +698,11 @@ header h1{
     padding:10px;
 
     font-weight:bold;
+
+}
+#overallRemarks{
+
+    margin-top:10px;
 
 }
 
@@ -764,7 +760,7 @@ header h1{
 
 #saveValidationBtn{
 
-    width:100%;
+
 
     margin-top:20px;
 
@@ -779,6 +775,15 @@ header h1{
     color:white;
 
     cursor:pointer;
+  
+    position:sticky;
+
+    bottom:0;
+
+    width:100%;
+
+}
+
 
 }
 
@@ -1288,5 +1293,55 @@ header h1{
     gap:12px;
 
     z-index:100;
+
+}
+
+.current-summary{
+
+    padding:18px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    margin-bottom:15px;
+
+}
+
+.summary-room{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#173f73;
+
+}
+
+.summary-sku{
+
+    font-size:20px;
+
+    margin-top:8px;
+
+    font-weight:600;
+
+}
+
+.summary-info{
+
+    margin-top:10px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.summary-description{
+
+    margin-top:10px;
+
+    color:#666;
 
 }

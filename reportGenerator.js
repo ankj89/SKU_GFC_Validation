@@ -106,7 +106,7 @@ ${record.elevationNo||""}
 
 <td>
 
-${buildQtyValidation(record)}
+${record.qtyValidation || "Pending"}
 
 </td>
 

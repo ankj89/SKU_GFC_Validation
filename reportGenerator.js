@@ -296,41 +296,47 @@ function generateExtraItemsReport(container){
 // CATEGORY VALIDATION
 // =====================================
 
+// =====================================
+// CATEGORY VALIDATION
+// =====================================
+
 function buildCategoryValidation(record){
 
-    const issues=[];
+    const output = [];
 
-    (record.checklist||[]).forEach(item=>{
+    (record.checklist || []).forEach(item=>{
 
-        if(item.status!=="Absent"){
-
+        if(item.status !== "Absent"){
             return;
+        }
+
+        let text = "• " + item.title;
+
+        if(item.remark && item.remark.trim() !== ""){
+
+            text +=
+
+                "<br><span style='margin-left:18px;color:#666;'>"
+
+                + "<b>Remarks :</b> "
+
+                + item.remark +
+
+                "</span>";
 
         }
 
-        let line=item.title;
-
-        if(item.remark){
-
-            line+="<br><i>Remarks : "
-
-                +item.remark+
-
-                "</i>";
-
-        }
-
-        issues.push(line);
+        output.push(text);
 
     });
 
-    if(issues.length===0){
+    if(output.length === 0){
 
         return "OK";
 
     }
 
-    return issues.join("<hr>");
+    return output.join("<br><br>");
 
 }
 

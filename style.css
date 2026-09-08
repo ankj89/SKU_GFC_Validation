@@ -1157,12 +1157,21 @@ header h1{
     margin-bottom:15px;
 
 }
-
 #jumpList{
 
-    height:400px;
+    flex:1;
+
+    min-height:0;
 
     overflow-y:auto;
+
+    margin:10px 0;
+
+}
+
+#closeJumpBtn{
+
+    flex-shrink:0;
 
 }
 

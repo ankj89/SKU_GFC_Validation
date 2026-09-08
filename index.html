@@ -337,72 +337,108 @@
 
 <hr>
 
-<label>
+            <div class="validation-section">
 
-    <input
-        type="checkbox"
-        id="drawingFound"
-        checked>
+    <label>Drawing Status</label>
 
-    Drawing Found
+    <div class="drawing-status">
 
-</label>
+        <label>
 
+            <input
+                type="radio"
+                name="drawingStatus"
+                value="FOUND">
+
+            Found
+
+        </label>
+
+        <label>
+
+            <input
+                type="radio"
+                name="drawingStatus"
+                value="NOT_FOUND">
+
+            Not Found
+
+        </label>
+
+    </div>
+
+</div>
 <!-- ========================= -->
 <!-- FOUND PANEL -->
 <!-- ========================= -->
 
-<div id="drawingFoundSection">
+<div
+    id="foundSection"
+    class="hidden">
 
-    <label>Drawing Page</label>
+    <div class="validation-grid">
 
-    <input
-        type="number"
-        id="drawingPage">
+        <div>
 
-    <label>Elevation Number</label>
+            <label>Drawing Page</label>
 
-    <input
-        type="text"
-        id="elevationNo">
+            <input
+                id="drawingPage"
+                type="number">
 
-    <label>Visible Qty in GFC</label>
+        </div>
 
-    <input
-        type="number"
-        id="gfcQty">
+        <div>
 
-    <label>Qty Validation</label>
+            <label>Elevation Number</label>
 
-    <input
-        id="qtyValidation"
-        readonly>
+            <input
+                id="elevationNo"
+                type="text">
+
+        </div>
+
+        <div>
+
+            <label>Visible Qty in GFC</label>
+
+            <input
+                id="gfcQty"
+                type="number">
+
+        </div>
+
+        <div>
+
+            <label>Qty Validation</label>
+
+            <input
+                id="qtyValidation"
+                readonly>
+
+        </div>
+
+    </div>
 
 </div>
 
 <!-- ========================= -->
 <!-- NOT FOUND PANEL -->
 <!-- ========================= -->
-
 <div
-    id="drawingMissingSection"
+    id="notFoundSection"
     class="hidden">
 
-    <label>
-        Expected Elevation
-    </label>
+    <label>Expected Elevation</label>
 
     <input
-        type="text"
         id="missingElevation">
 
-    <label>
-        Action Required
-    </label>
+    <label>Action Required</label>
 
     <textarea
-        id="missingRemarks">
-    </textarea>
+        id="missingRemarks"
+        rows="6"></textarea>
 
 </div>
 

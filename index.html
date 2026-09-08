@@ -358,102 +358,109 @@
 
 </div>
 
-            <div class="validation-section">
+          <!-- ========================================= -->
+<!-- TOP VALIDATION AREA -->
+<!-- ========================================= -->
 
-    <label>Drawing Status</label>
+<div class="validation-top">
 
-    <div class="drawing-status">
+    <!-- LEFT : DRAWING STATUS -->
 
-        <label>
+    <div class="drawing-status-panel">
 
-            <input
-                type="radio"
-                name="drawingStatus"
-                value="FOUND">
+        <label>Drawing Status</label>
 
-            Found
+        <div class="drawing-status">
 
-        </label>
+            <label>
 
-        <label>
+                <input
+                    type="radio"
+                    name="drawingStatus"
+                    value="FOUND">
 
-            <input
-                type="radio"
-                name="drawingStatus"
-                value="NOT_FOUND">
+                Found
 
-            Not Found
+            </label>
 
-        </label>
+            <label>
 
-    </div>
+                <input
+                    type="radio"
+                    name="drawingStatus"
+                    value="NOT_FOUND">
 
-</div>
-<!-- ========================= -->
-<!-- FOUND PANEL -->
-<!-- ========================= -->
+                Not Found
 
-<div
-    id="foundSection"
-    class="hidden">
-
-    <div class="validation-grid">
-
-        <div>
-
-            <label>Drawing Page</label>
-
-            <input
-                id="drawingPage"
-                type="number">
-
-        </div>
-
-        <div>
-
-            <label>Elevation Number</label>
-
-            <input
-                id="elevationNo"
-                type="text">
-
-        </div>
-
-        <div>
-
-            <label>Visible Qty in GFC</label>
-
-            <input
-                id="gfcQty"
-                type="number">
-
-        </div>
-
-        <div>
-
-            <label>Qty Validation</label>
-
-            <input
-                id="qtyValidation"
-                readonly>
+            </label>
 
         </div>
 
     </div>
 
+    <!-- RIGHT -->
+
+    <div id="foundSection" class="hidden">
+
+        <div class="drawing-info-grid">
+
+            <div>
+
+                <label>Drawing Page</label>
+
+                <input
+                    id="drawingPage"
+                    type="number">
+
+            </div>
+
+            <div>
+
+                <label>Elevation Number</label>
+
+                <input
+                    id="elevationNo"
+                    type="text">
+
+            </div>
+
+            <div>
+
+                <label>Visible Qty in GFC</label>
+
+                <input
+                    id="gfcQty"
+                    type="number">
+
+            </div>
+
+            <div>
+
+                <label>Qty Validation</label>
+
+                <input
+                    id="qtyValidation"
+                    readonly>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
-<!-- ========================= -->
+<!-- ========================================= -->
 <!-- NOT FOUND PANEL -->
-<!-- ========================= -->
+<!-- ========================================= -->
+
 <div
     id="notFoundSection"
     class="hidden">
 
     <label>Expected Elevation</label>
 
-    <input
-        id="missingElevation">
+    <input id="missingElevation">
 
     <label>Action Required</label>
 
@@ -462,29 +469,6 @@
         rows="6"></textarea>
 
 </div>
-
-        
-<div id="jumpModal" class="jump-modal hidden">
-
-    <div class="jump-box">
-
-        <input
-            id="jumpSearch"
-            type="text"
-            placeholder="Search SKU or Room">
-
-        <div id="jumpList"></div>
-
-        <button
-            id="closeJumpBtn">
-            Close
-        </button>
-
-    </div>
-
-</div>
-
-
         
         <!-- ================= CATEGORY ================= -->
 

@@ -275,15 +275,20 @@ function collectChecklist() {
             )
             ?.value || "";
 
-        rows.push({
+       const radio =
+    item.querySelector('input[type="radio"]');
 
-            title,
+rows.push({
 
-            status,
+    id: radio.name,
 
-            remark
+    title,
 
-        });
+    status,
+
+    remark
+
+});
 
     });
 

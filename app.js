@@ -740,11 +740,12 @@ missingElevation:
                 selectedCategoryBasket
             )
         ),
-);
 
-       console.log(
+console.log(
     "CHECKLIST SAVED",
     collectChecklist()
+);
+       
     checklist:
         JSON.parse(
             JSON.stringify(

@@ -1,125 +1,130 @@
 // =====================================
-// GENERATE REPORTS
+// REPORT GENERATOR V2
 // =====================================
 
-function generateReports() {
+// =====================================
+// GENERATE ALL REPORTS
+// =====================================
+
+function generateReports(){
 
     const container =
         document.getElementById(
             "reportContainer"
         );
 
-    container.innerHTML = "";
+    container.innerHTML="";
 
-    generateValidationFindingsReport(
-        container
-    );
+    generateFoundSKUReport(container);
 
+    generateNotFoundSKUReport(container);
 
-    generateMissingCoverageReport(
-        container
-    );
-    
-     // NEW
-    generateQtyMismatchReport(
-        container
-    );
-
-    /*generateExtraScopeReport(
-        container)*/
-
+    generateExtraItemsReport(container);
 
 }
 
+
+
 // =====================================
-// VALIDATION FINDINGS
-// =====================================
-// =====================================
-// QTY MISMATCH REPORT
+// REPORT 1
+// SKU FOUND
 // =====================================
 
-function generateQtyMismatchReport(container) {
+function generateFoundSKUReport(container){
+
+    const records =
+
+        validationStore.filter(r=>
+
+            r.drawingStatus==="FOUND"
+
+        );
 
     const section =
         document.createElement("div");
 
-    section.innerHTML = `
-        <h3>
-            Quantity Validation Report
-        </h3>
-    `;
+    section.innerHTML=
 
-    // Show only mismatches
-    const mismatches = qtyValidationData.filter(row =>
-        row.status !== "Match" &&
-        row.status !== "Pending"
-    );
-
-    if (mismatches.length === 0) {
-
-        section.innerHTML += `
-            <p>
-                No Quantity Mismatches Found
-            </p>
-        `;
-
-        container.appendChild(section);
-        return;
-
-    }
+        `<h2>SKU Found Report</h2>`;
 
     const table =
         document.createElement("table");
 
-    table.className = "report-table";
+    table.className="report-table";
 
-    table.innerHTML = `
+    table.innerHTML=`
 
-        <tr>
+<tr>
 
-            <th>Page</th>
+<th>Room</th>
 
-            <th>Room</th>
+<th>SKU</th>
 
-            <th>Item</th>
+<th>Drawing Page</th>
 
-            <th>BOQ Qty</th>
+<th>Elevation No</th>
 
-            <th>GFC Qty</th>
+<th>Qty Validation</th>
 
-            <th>Status</th>
+<th>Category Validation</th>
 
-        </tr>
+<th>Overall Remarks</th>
 
-    `;
+</tr>
 
-    mismatches.forEach(row => {
+`;
 
-        table.innerHTML += `
+    records.forEach(record=>{
 
-            <tr>
+        table.innerHTML+=`
 
-                <td>${row.page ?? ""}</td>
+<tr>
 
-                <td>${row.room}</td>
+<td>
 
-                <td>${row.item}</td>
+${record.room}
 
-                <td style="text-align:center">
-                    ${row.boqQty}
-                </td>
+</td>
 
-                <td style="text-align:center">
-                    ${row.gfcQty}
-                </td>
+<td>
 
-                <td>
-                    ${row.status === "Short" ? "Less" : "More"}
-                </td>
+${record.item}
 
-            </tr>
+</td>
 
-        `;
+<td style="text-align:center">
+
+${record.drawingPage||""}
+
+</td>
+
+<td>
+
+${record.elevationNo||""}
+
+</td>
+
+<td>
+
+${buildQtyValidation(record)}
+
+</td>
+
+<td>
+
+${buildCategoryValidation(record)}
+
+</td>
+
+<td>
+
+${record.overallRemarks||""}
+
+</td>
+
+</tr>
+
+`;
 
     });
 
@@ -128,482 +133,252 @@ function generateQtyMismatchReport(container) {
     container.appendChild(section);
 
 }
-function generateValidationFindingsReport(
-    container
-) {
+
+
+
+// =====================================
+// REPORT 2
+// DRAWING NOT FOUND
+// =====================================
+
+function generateNotFoundSKUReport(container){
+
+    const records =
+
+        validationStore.filter(r=>
+
+            r.drawingStatus==="NOT_FOUND"
+
+        );
 
     const section =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
-    section.innerHTML =
+    section.innerHTML=
 
-        `<h3>
-            Validation Findings
-        </h3>`;
+        `<h2>SKU Not Found Report</h2>`;
 
-    const table =
-        document.createElement(
-            "table"
-        );
+    if(records.length===0){
 
-    table.className =
-        "report-table";
+        section.innerHTML+=
 
-    table.innerHTML = `
+            `<p>No Missing Drawings</p>`;
 
-        <tr>
-
-           <th>Page</th>
-<th>Room</th>
-<th>Drawing Category</th>
-<th>Findings</th>
-
-        </tr>
-
-    `;
-
-    validationStore.forEach(row => {
-
-        const tr =
-            document.createElement(
-                "tr"
-            );
-
-        tr.innerHTML = `
-
-            <td>
-                ${row.pageNo}
-            </td>
-
-            <td>
-                ${row.room}
-            </td>
-<td>
-    ${
-        (row.categories || [])
-        .join(", ")
-    }
-</td>
-
-            <td>
-                ${buildChecklistSummary(
-                    row
-                )}
-            </td>
-
-        `;
-
-        table.appendChild(
-            tr
-        );
-
-    });
-
-    section.appendChild(
-        table
-    );
-
-    container.appendChild(
-        section
-    );
-
-}
-
-// =====================================
-// ROOM COVERAGE
-// =====================================
-
-function generateRoomCoverageReport(
-    container
-) {
-
-    const coverage =
-        buildRoomCoverage();
-
-    const section =
-        document.createElement(
-            "div"
-        );
-
-    section.innerHTML =
-
-        `<h3>
-            Room Coverage Report
-        </h3>`;
-
-    let html = "";
-
-    Object.keys(
-        coverage
-    ).forEach(room => {
-
-        html +=
-
-            `<h4>
-                ${room}
-            </h4>`;
-
-        html += "<ul>";
-
-        coverage[
-            room
-        ].forEach(item => {
-
-            html +=
-
-                `<li>
-
-                    ${item.qty}
-                    x
-                    ${item.item}
-
-                </li>`;
-
-        });
-
-        html += "</ul>";
-
-    });
-
-    section.innerHTML +=
-        html;
-
-    container.appendChild(
-        section
-    );
-
-}
-
-// =====================================
-// MISSING COVERAGE
-// =====================================
-
-function generateMissingCoverageReport(
-    container
-) {
-
-    const missing =
-        getMissingSKUs();
-
-    const section =
-        document.createElement(
-            "div"
-        );
-
-    section.innerHTML = `
-        <h3>
-            Missing Coverage Report
-        </h3>
-    `;
-
-    if (
-        missing.length === 0
-    ) {
-
-        section.innerHTML += `
-            <p>
-                No Missing SKUs
-            </p>
-        `;
-
-        container.appendChild(
-            section
-        );
+        container.appendChild(section);
 
         return;
 
     }
 
     const table =
-        document.createElement(
-            "table"
-        );
+        document.createElement("table");
 
-    table.className =
-        "report-table";
+    table.className="report-table";
 
-    table.innerHTML = `
-        <tr>
-            <th>Qty</th>
-            <th>Item</th>
-            <th>Room</th>
-        </tr>
-    `;
+    table.innerHTML=`
 
-    missing.forEach(item => {
+<tr>
 
-        table.innerHTML += `
-            <tr>
-                <td>${item.qty}</td>
-                <td>${item.item}</td>
-                <td>${item.room || ""}</td>
-            </tr>
-        `;
+<th>Room</th>
+
+<th>SKU</th>
+
+<th>Qty</th>
+
+<th>Elevation Number</th>
+
+<th>Action Required</th>
+
+</tr>
+
+`;
+
+    records.forEach(record=>{
+
+        table.innerHTML+=`
+
+<tr>
+
+<td>
+
+${record.room}
+
+</td>
+
+<td>
+
+${record.item}
+
+</td>
+
+<td style="text-align:center">
+
+${record.boqQty}
+
+</td>
+
+<td>
+
+${record.missingElevation||""}
+
+</td>
+
+<td>
+
+${record.missingRemarks||""}
+
+</td>
+
+</tr>
+
+`;
 
     });
 
-    section.appendChild(
-        table
-    );
+    section.appendChild(table);
 
-    container.appendChild(
-        section
-    );
+    container.appendChild(section);
 
 }
 
+
+
 // =====================================
-// EXTRA SCOPE REPORT
+// REPORT 3
+// EXTRA ITEMS
 // =====================================
 
-/*function generateExtraScopeReport(
-    container
-) {
+function generateExtraItemsReport(container){
 
     const section =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
-    section.innerHTML =
+    section.innerHTML=
 
-        `<h3>
-            Drawing vs BOQ Mismatch Report
-        </h3>`;
+        `<h2>Extra Items Report</h2>`;
 
-    let html = "";
+    const table =
+        document.createElement("table");
 
-    validationStore.forEach(page => {
+    table.className="report-table";
 
-        if (
-            !page.extraDrawingItems ||
-            page.extraDrawingItems.length === 0
-        ) {
+    table.innerHTML=`
+
+<tr>
+
+<th>Drawing Page</th>
+
+<th>Room</th>
+
+<th>Description</th>
+
+<th>Action Required</th>
+
+</tr>
+
+`;
+
+    /*
+        Future
+
+        extraItemStore.forEach(...)
+    */
+
+    section.appendChild(table);
+
+    container.appendChild(section);
+
+}
+
+
+
+// =====================================
+// CATEGORY VALIDATION
+// =====================================
+
+function buildCategoryValidation(record){
+
+    const issues=[];
+
+    (record.checklist||[]).forEach(item=>{
+
+        if(item.status!=="Absent"){
+
             return;
+
         }
 
-        html +=
+        let line=item.title;
 
-            `<h4>
+        if(item.remark){
 
-                Page
-                ${page.pageNo}
+            line+="<br><i>Remarks : "
 
-            </h4>`;
+                +item.remark+
 
-        html += "<ul>";
+                "</i>";
 
-        page.extraDrawingItems.forEach(item => {
+        }
 
-            html +=
-
-                `<li>
-
-                    ${item.item}
-
-                    -
-                    ${item.reason}
-
-                </li>`;
-
-        });
-
-        html += "</ul>";
+        issues.push(line);
 
     });
 
-    section.innerHTML +=
-        html;
+    if(issues.length===0){
 
-    container.appendChild(
-        section
-    );
-
-}
-*/
-// =====================================
-// MISSING DRAWINGS
-// =====================================
-
-function generateMissingDrawingsReport(
-    container
-) {
-
-    const section =
-        document.createElement(
-            "div"
-        );
-
-    section.innerHTML =
-
-        `<h3>
-            Missing Drawings Report
-        </h3>`;
-
-    let html = "";
-
-    validationStore.forEach(page => {
-
-        if (
-            !page.drawingNotAvailable
-        ) {
-            return;
-        }
-
-        html +=
-
-            `<p>
-
-                Page
-                ${page.pageNo}
-
-                :
-
-                ${page.room}
-
-                :
-
-                ${page.drawingMissingReason}
-
-            </p>`;
-
-    });
-
-    section.innerHTML +=
-        html;
-
-    container.appendChild(
-        section
-    );
-
-}
-
-// =====================================
-// CHECKLIST SUMMARY
-// =====================================
-
-function buildChecklistSummary(
-    page
-) {
-
-    const absentItems = [];
-
-    const remarks = [];
-
-    (
-        page.checklist || []
-    ).forEach(item => {
-
-        const status =
-            item.status || "";
-
-        const remark =
-            (
-                item.remark || ""
-            ).trim();
-
-        if (
-            status === "Absent"
-        ) {
-
-            absentItems.push(
-                item.title
-            );
-
-        }
-
-        if (
-            remark !== ""
-        ) {
-
-            remarks.push(
-
-                `${item.title}
-                :
-                ${remark}`
-
-            );
-
-        }
-
-    });
-
-    let text = "";
-
-    if (
-        absentItems.length
-    ) {
-
-        text +=
-            "<b>Absent Items:</b><br>";
-
-        absentItems.forEach(item => {
-
-            text +=
-                "• " +
-                item +
-                "<br>";
-
-        });
-
-        text += "<br>";
+        return "OK";
 
     }
 
-    if (
-        remarks.length
-    ) {
-
-        text +=
-            "<b>Remarks:</b><br>";
-
-        remarks.forEach(item => {
-
-            text +=
-                "• " +
-                item +
-                "<br>";
-
-        });
-
-        text += "<br>";
-
-    }
-
-    if (
-        page.overallRemarks &&
-        page.overallRemarks.trim()
-    ) {
-
-        text +=
-
-            "<b>Overall:</b><br>" +
-
-            page.overallRemarks;
-
-    }
-
-    return text;
+    return issues.join("<hr>");
 
 }
 
+
+
 // =====================================
-// ITEM FORMAT
+// QTY VALIDATION
 // =====================================
 
-function formatItems(items) {
+function buildQtyValidation(record){
 
-    return items
-        .map(item =>
+    const boq=
 
-            `${item.qty} | ${item.room} | ${item.item}`
+        Number(record.boqQty||0);
 
-        )
-        .join("<br>");
+    const gfc=
+
+        Number(record.gfcQty||0);
+
+    let status="OK";
+
+    if(gfc>boq){
+
+        status="HIGH";
+
+    }
+
+    else if(gfc<boq){
+
+        status="LOW";
+
+    }
+
+    return
+
+        `BOQ = ${boq}
+
+        <br>
+
+        GFC = ${gfc}
+
+        <br>
+
+        <b>${status}</b>`;
 
 }
+
+
 
 // =====================================
 // EVENT

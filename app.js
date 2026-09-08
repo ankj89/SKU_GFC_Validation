@@ -184,48 +184,21 @@ function renderCurrentSKU(){
         return;
     }
 
-    document.getElementById(
-        "currentRoom"
-    ).innerText =
+    document.getElementById("currentRoom").innerText =
         currentSKU.room;
 
-    document.getElementById(
-        "currentSKU"
-    ).innerText =
+    document.getElementById("currentSKU").innerText =
         currentSKU.item;
-    
+
     document.getElementById("currentDescription").innerText =
         currentSKU.description || "-";
 
-    document.getElementById(
-        "currentQty"
-    ).innerText =
+    document.getElementById("currentQty").innerText =
         currentSKU.qty;
 
-    document.getElementById(
-        "currentPrice"
-    ).innerText =
+    document.getElementById("currentPrice").innerText =
         currentSKU.price;
 
-    document.getElementById(
-        "drawingPage"
-    ).value="";
-
-    document.getElementById(
-        "gfcQty"
-    ).value="";
-
-    drawingStatus:
-
-document.querySelector(
-'input[name="drawingStatus"]:checked'
-)?.value || "",
-
-    selectedCategoryBasket=[];
-
-    renderSelectedCategories();
-
-    generateChecklist();
     loadExistingValidation();
 
 }
@@ -1365,9 +1338,14 @@ document
 .getElementById("drawingPage")
 .addEventListener("input",()=>{
 
-    document
-    .getElementById("predictionMessage")
-    .innerHTML="";
+const prediction =
+    document.getElementById("predictionMessage");
+
+if(prediction){
+
+    prediction.innerHTML = "";
+
+}
 
     document
     .getElementById("drawingPage")

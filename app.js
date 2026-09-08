@@ -584,7 +584,8 @@ document.getElementById("missingRemarks").value =
     renderSelectedCategories();
 
     generateChecklist();
-
+    
+console.log("CHECKLIST LOADED", saved.checklist);
     restoreChecklist(saved);
 
   
@@ -740,6 +741,10 @@ missingElevation:
             )
         ),
 
+       console.log(
+    "CHECKLIST SAVED",
+    collectChecklist()
+);
     checklist:
         JSON.parse(
             JSON.stringify(
@@ -755,6 +760,7 @@ missingElevation:
 };
 learnDrawing(record);
    saveCurrentSKUValidation(record);
+console.log("FULL RECORD", record);
 
    if(showMessage){
 

@@ -112,7 +112,7 @@ ${record.qtyValidation || "Pending"}
 
 <td>
 
-${buildCategoryValidation(record)}
+${buildCategoryValidationExcel(record)}
 
 </td>
 

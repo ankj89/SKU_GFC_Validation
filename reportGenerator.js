@@ -300,42 +300,126 @@ function generateExtraItemsReport(container){
 // CATEGORY VALIDATION
 // =====================================
 
+function formatChecklistFailure(title){
+
+    const cleanTitle = title.trim();
+
+    const lower = cleanTitle.toLowerCase();
+
+    const exactMap = {
+
+        "post demolition finishing mentioned":
+            "Post demolition finishing is NOT mentioned.",
+
+        "wall thickness mentioned":
+            "Wall thickness is NOT mentioned.",
+
+        "wall height mentioned":
+            "Wall height is NOT mentioned.",
+
+        "wall finish mentioned":
+            "Wall finish is NOT mentioned.",
+
+        "new wall locations shown in plan":
+            "New wall locations are NOT shown in the plan.",
+
+        "existing wall locations shown in plan":
+            "Existing wall locations are NOT shown in the plan.",
+
+        "electrical point locations shown":
+            "Electrical point locations are NOT shown.",
+
+        "door opening shown":
+            "Door opening is NOT shown.",
+
+        "window opening shown":
+            "Window opening is NOT shown.",
+
+        "skirting area clearly demarcated in plan":
+            "Skirting area is NOT clearly demarcated in the plan."
+
+    };
+
+    if(exactMap[lower]){
+        return exactMap[lower];
+    }
+
+    if(lower.endsWith(" mentioned")){
+
+        return cleanTitle.replace(/mentioned$/i,"is NOT mentioned.");
+
+    }
+
+    if(lower.endsWith(" shown")){
+
+        return cleanTitle.replace(/shown$/i,"is NOT shown.");
+
+    }
+
+    if(lower.endsWith(" available")){
+
+        return cleanTitle.replace(/available$/i,"is NOT available.");
+
+    }
+
+    if(lower.endsWith(" provided")){
+
+        return cleanTitle.replace(/provided$/i,"is NOT provided.");
+
+    }
+
+    if(lower.endsWith(" specified")){
+
+        return cleanTitle.replace(/specified$/i,"is NOT specified.");
+
+    }
+
+    if(lower.endsWith(" demarcated")){
+
+        return cleanTitle.replace(/demarcated$/i,"is NOT demarcated.");
+
+    }
+
+    return cleanTitle + " - NOT COMPLIANT.";
+
+}
+
+
+
+
 function buildCategoryValidationExcel(record){
 
     const lines=[];
 
-    (record.checklist || []).forEach(item=>{
+(record.checklist || []).forEach(item=>{
 
-        if(item.status !== "Absent"){
-            return;
-        }
+    if(item.status!=="Absent"){
+        return;
+    }
 
-        let title = item.title;
+    let text =
+        "• " +
+        formatChecklistFailure(item.title);
 
-        // Insert "NOT" before common ending words
-        title = title.replace(/\b(Mentioned|mentioned|Shown|shown|Provided|provided|Demarcated|demarcated|Specified|specified|Indicated|indicated|Marked|marked|Available|available|Visible|visible)\b/i,
-            "NOT $1"
-        );
+    if(item.remark && item.remark.trim()){
 
-        lines.push("• " + title);
-
-        if(item.remark && item.remark.trim()){
-
-            lines.push("   Remarks : " + item.remark);
-
-        }
-
-        lines.push("");
-
-    });
-
-    if(lines.length===0){
-
-        return "OK";
+        text +=
+            "<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>Remarks:</b> "
+            + item.remark;
 
     }
 
-    return lines.join("\n");
+    lines.push(text);
+
+});
+
+if(lines.length===0){
+
+    return "OK";
+
+}
+
+return lines.join("<br><br>");
 
 }
 

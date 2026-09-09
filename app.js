@@ -1310,29 +1310,31 @@ document
 
 
 
-document
-.getElementById("jumpSearch")
-.addEventListener("input",function(){
+const jumpSearch =
+    document.getElementById("jumpSearch");
 
-    const text=this.value.toLowerCase();
+if (jumpSearch) {
 
-    document
-    .querySelectorAll(".jump-row")
-    .forEach(row=>{
+    jumpSearch.addEventListener("input", function () {
 
-        row.style.display=
+        const text = this.value.toLowerCase();
 
-            row.innerText
-                .toLowerCase()
-                .includes(text)
+        document
+            .querySelectorAll(".jump-row")
+            .forEach(row => {
 
-                ?"block"
+                row.style.display =
+                    row.innerText
+                        .toLowerCase()
+                        .includes(text)
+                        ? "block"
+                        : "none";
 
-                :"none";
+            });
 
     });
 
-});
+}
 
 document
 .querySelectorAll(

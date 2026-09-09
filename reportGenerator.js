@@ -300,9 +300,9 @@ function generateExtraItemsReport(container){
 // CATEGORY VALIDATION
 // =====================================
 
-function buildCategoryValidation(record){
+function buildCategoryValidationExcel(record){
 
-    const output = [];
+    const lines=[];
 
     (record.checklist || []).forEach(item=>{
 
@@ -310,33 +310,32 @@ function buildCategoryValidation(record){
             return;
         }
 
-        let text = "• " + item.title;
+        let title = item.title;
 
-        if(item.remark && item.remark.trim() !== ""){
+        // Insert "NOT" before common ending words
+        title = title.replace(/\b(Mentioned|Shown|Provided|Demarcated|Specified|Indicated|Marked|Available|Visible)\b/i,
+            "NOT $1"
+        );
 
-            text +=
+        lines.push("• " + title);
 
-                "<br><span style='margin-left:18px;color:#666;'>"
+        if(item.remark && item.remark.trim()){
 
-                + "<b>Remarks :</b> "
-
-                + item.remark +
-
-                "</span>";
+            lines.push("   Remarks : " + item.remark);
 
         }
 
-        output.push(text);
+        lines.push("");
 
     });
 
-    if(output.length === 0){
+    if(lines.length===0){
 
         return "OK";
 
     }
 
-    return output.join("<br><br>");
+    return lines.join("\n");
 
 }
 

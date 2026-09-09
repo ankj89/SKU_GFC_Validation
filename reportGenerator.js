@@ -313,7 +313,7 @@ function buildCategoryValidationExcel(record){
         let title = item.title;
 
         // Insert "NOT" before common ending words
-        title = title.replace(/\b(Mentioned|Shown|Provided|Demarcated|Specified|Indicated|Marked|Available|Visible)\b/i,
+        title = title.replace(/\b(Mentioned|mentioned|Shown|shown|Provided|provided|Demarcated|demarcated|Specified|specified|Indicated|indicated|Marked|marked|Available|available|Visible|visible)\b/i,
             "NOT $1"
         );
 

@@ -10,8 +10,8 @@ const CHECKLIST_CONFIG = {
         [
 
         "Demolition Area Clearly Demarcated in Plan",
-        "Demolition Area Celarly demarcated in Elevation",
-        "Structural Walls marked in the Plan",
+        "Demolition Area Clearly Demarcated in Elevation",
+        "Structural Walls Marked in the Plan",
         "Wall Opening Locations Shown with dimensions",
         "Demolition Dimensions Mentioned",
         "Demolition Method Mentioned",

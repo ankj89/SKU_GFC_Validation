@@ -251,7 +251,9 @@ function populateReviewGrid(
     row.category,
 
 price:
-    row.price
+    row.price,
+        
+         description: row.description,
   
 
 });

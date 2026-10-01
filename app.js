@@ -324,68 +324,251 @@ async function applyPrediction(){
         return;
     }
 
-    // Already validated?
+
+    // =====================================================
+    // EXISTING VALIDATION
+    // =====================================================
+
     const saved =
-        getValidation(currentSKU.id);
+        getValidation(
+            currentSKU.id
+        );
 
-    // If page already exists, do nothing.
-    if(saved && saved.drawingPage){
+
+    // If this SKU has already been validated,
+    // restore its saved page and do not run a new search.
+
+    if(
+        saved &&
+        saved.drawingPage
+    ){
+
         return;
+
     }
 
-    const prediction =
-        predictDrawing(currentSKU);
 
-    if(!prediction){
+    // =====================================================
+    // STEP 1
+    // LEARNED ROOM + SKU
+    // =====================================================
+
+    const learnedPrediction =
+        predictDrawing(
+            currentSKU
+        );
+
+
+    if(
+        learnedPrediction &&
+        learnedPrediction.page
+    ){
+
+        document
+            .getElementById(
+                "drawingPage"
+            )
+            .value =
+                learnedPrediction.page;
+
+
+        document
+            .getElementById(
+                "drawingPage"
+            )
+            .classList
+            .add("suggested");
+
+
+        await goToPDFPage(
+            learnedPrediction.page
+        );
+
+
+        showPredictionMessage(
+            learnedPrediction
+        );
+
+
         return;
+
     }
 
-    document.getElementById("drawingPage").value =
-        prediction.page;
+
+    // =====================================================
+    // STEP 2
+    // SEARCH ENTIRE GFC
+    // =====================================================
+
+    if(
+        !isGFCPageIndexReady()
+    ){
+
+        console.log(
+            "GFC index not ready yet."
+        );
+
+        return;
+
+    }
+
+
+    const searchResult =
+        findBestGFCPage(
+            currentSKU
+        );
+
+
+    if(
+        !searchResult
+    ){
+
+        showPredictionMessage(
+            null
+        );
+
+        console.log(
+            "No GFC page match found for:",
+            currentSKU.room,
+            currentSKU.item
+        );
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // OPEN BEST MATCH
+    // =====================================================
 
     document
-        .getElementById("drawingPage")
+        .getElementById(
+            "drawingPage"
+        )
+        .value =
+            searchResult.page;
+
+
+    document
+        .getElementById(
+            "drawingPage"
+        )
         .classList
         .add("suggested");
 
-    await goToPDFPage(prediction.page);
 
-    showPredictionMessage(prediction);
+    await goToPDFPage(
+        searchResult.page
+    );
+
+
+    showPredictionMessage(
+        searchResult
+    );
+
+
+    console.log(
+        "GFC PAGE SEARCH RESULT",
+        {
+            room:
+                currentSKU.room,
+
+            sku:
+                currentSKU.item,
+
+            bestPage:
+                searchResult.page,
+
+            score:
+                searchResult.score,
+
+            candidates:
+                searchResult.candidates
+        }
+    );
 
 }
-
-function showPredictionMessage(prediction){
+function showPredictionMessage(
+    prediction
+){
 
     const div =
         document.getElementById(
             "predictionMessage"
         );
 
+
     if(!div){
         return;
     }
 
+
     if(!prediction){
 
-        div.innerHTML = "";
+        div.innerHTML =
+            "⚠ No matching GFC page found automatically.";
 
         return;
 
     }
 
-    if(prediction.source==="SKU"){
+
+    if(
+        prediction.source ===
+        "ROOM_SKU"
+    ){
 
         div.innerHTML =
-            "💡 Suggested from previous validation of the same SKU";
+            "💡 Page learned from previous validation of this Room + SKU.";
+
+        return;
 
     }
 
-    else if(prediction.source==="ROOM"){
+
+    if(
+        prediction.source ===
+        "SKU"
+    ){
 
         div.innerHTML =
-            "💡 Suggested from latest drawing of this room";
+            "💡 Page suggested from previous validation of this SKU.";
+
+        return;
 
     }
+
+
+    if(
+        prediction.source ===
+        "ROOM"
+    ){
+
+        div.innerHTML =
+            "💡 Page suggested from previous validation of this room.";
+
+        return;
+
+    }
+
+
+    if(
+        prediction.source ===
+        "SEARCH"
+    ){
+
+        div.innerHTML =
+            `🔎 GFC search suggestion: Page ${prediction.page}
+             &nbsp; | &nbsp;
+             Match score: ${prediction.score}/100`;
+
+        return;
+
+    }
+
+
+    div.innerHTML = "";
 
 }
 

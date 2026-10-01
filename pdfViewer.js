@@ -63,14 +63,29 @@ async function loadPDF(
             );
 
         pdfDocument =
-            await pdfjsLib
-                .getDocument(
-                    pdfData
-                )
-                .promise;
+    await pdfjsLib
+        .getDocument(
+            pdfData
+        )
+        .promise;
 
-        totalPages =
-            pdfDocument.numPages;
+totalPages =
+    pdfDocument.numPages;
+
+
+// =====================================================
+// BUILD SEARCHABLE GFC PAGE INDEX
+// =====================================================
+
+await buildGFCPageIndex(
+    pdfDocument
+);
+
+
+// =====================================================
+// GENERATE THUMBNAILS
+// =====================================================
+
 generateThumbnails();
         currentPageNumber = 1;
 

@@ -2,7 +2,6 @@
 // DRAWING KNOWLEDGE ENGINE
 // =====================================
 
-
 // =====================================
 // NORMALIZE SKU
 // =====================================
@@ -13,7 +12,7 @@ function getLearningKey(item){
         return "";
     }
 
-    return item
+    return String(item)
         .replace(/\[.*?\]/g,"")
         .replace(/\s+/g," ")
         .trim()
@@ -32,10 +31,29 @@ function getRoomLearningKey(room){
         return "";
     }
 
-    return String(room)
-        .replace(/\s+/g," ")
+    let value = String(room)
         .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/\s+/g," ")
+        .replace(/[_]+/g," ")
+        .replace(/-/g," ");
+
+    // Bedroom-02 / Bedroom 02 / Bedroom-2
+    // all become bedroom 2
+
+    value = value.replace(
+        /\bbedroom\s*0*(\d+)\b/g,
+        "bedroom $1"
+    );
+
+    value = value.replace(
+        /\bbed\s*0*(\d+)\b/g,
+        "bedroom $1"
+    );
+
+    return value
+        .replace(/\s+/g," ")
+        .trim();
 
 }
 
@@ -44,21 +62,12 @@ function getRoomLearningKey(room){
 // ROOM + SKU KEY
 // =====================================
 
-function getRoomSKULearningKey(
-    room,
-    item
-){
-
-    const roomKey =
-        getRoomLearningKey(room);
-
-    const skuKey =
-        getLearningKey(item);
+function getRoomSKULearningKey(room,item){
 
     return (
-        roomKey +
+        getRoomLearningKey(room) +
         "||" +
-        skuKey
+        getLearningKey(item)
     );
 
 }
@@ -70,12 +79,13 @@ function getRoomSKULearningKey(
 
 let drawingKnowledge = {
 
-    // NEW PRIMARY LEARNING
+    // PRIMARY
     roomSkuMap:{},
 
-    // OLD LEARNING RETAINED
+    // FALLBACK
     skuMap:{},
 
+    // FALLBACK
     roomPageMap:{}
 
 };
@@ -96,10 +106,6 @@ function resetDrawingKnowledge(){
         roomPageMap:{}
 
     };
-
-    console.log(
-        "Drawing Knowledge Reset"
-    );
 
 }
 
@@ -125,28 +131,22 @@ function learnDrawing(record){
         return;
     }
 
-    if(
-        !record.drawingPage
-    ){
+    if(!record.drawingPage){
         return;
     }
-
 
     const page =
         Number(record.drawingPage);
 
-    if(
-        !page ||
-        page < 1
-    ){
+    if(!page || page < 1){
         return;
     }
 
 
-    // =====================================================
+    // =====================================
     // PRIMARY LEARNING
     // ROOM + SKU
-    // =====================================================
+    // =====================================
 
     const roomSkuKey =
         getRoomSKULearningKey(
@@ -156,35 +156,36 @@ function learnDrawing(record){
 
     if(roomSkuKey){
 
-        drawingKnowledge
-            .roomSkuMap[roomSkuKey] = {
+        drawingKnowledge.roomSkuMap[
+            roomSkuKey
+        ] = {
 
-                room:
-                    record.room,
+            room:
+                record.room,
 
-                item:
-                    record.item,
+            item:
+                record.item,
 
-                page:
-                    page,
+            page:
+                page,
 
-                category:
-                    record.categories &&
-                    record.categories.length
-                        ? record.categories[0]
-                        : "",
+            category:
+                record.categories &&
+                record.categories.length
+                    ? record.categories[0]
+                    : "",
 
-                updatedOn:
-                    new Date().toISOString()
+            updatedOn:
+                new Date().toISOString()
 
-            };
+        };
 
     }
 
 
-    // =====================================================
-    // EXISTING FULL-HOME LEARNING
-    // =====================================================
+    // =====================================
+    // EXISTING CATEGORY LEARNING
+    // =====================================
 
     if(
         record.categories &&
@@ -203,64 +204,55 @@ function learnDrawing(record){
                 config.drawingLevel;
 
 
-            if(
-                level === "FULL_HOME"
-            ){
+            // FULL HOME
+            if(level === "FULL_HOME"){
 
                 const key =
                     getLearningKey(
                         record.item
                     );
 
-                drawingKnowledge
-                    .skuMap[key] = {
+                drawingKnowledge.skuMap[key] = {
 
-                        page:
-                            page,
+                    page:
+                        page,
 
-                        category:
-                            category,
+                    category:
+                        category,
 
-                        updatedOn:
-                            new Date().toISOString()
+                    updatedOn:
+                        new Date().toISOString()
 
-                    };
+                };
 
             }
 
 
-            // =================================================
-            // EXISTING ROOM LEARNING
-            // =================================================
-
-            else if(
-                level === "ROOM"
-            ){
+            // ROOM
+            else if(level === "ROOM"){
 
                 const roomKey =
                     getRoomLearningKey(
                         record.room
                     );
 
-                drawingKnowledge
-                    .roomPageMap[
-                        roomKey
-                    ] = {
+                drawingKnowledge.roomPageMap[
+                    roomKey
+                ] = {
 
-                        page:
-                            page,
+                    page:
+                        page,
 
-                        category:
-                            category
+                    category:
+                        category
 
-                    };
+                };
 
             }
 
         }
 
     }
-
 
     console.log(
         "Drawing Knowledge Updated",
@@ -274,19 +266,16 @@ function learnDrawing(record){
 // PREDICT
 // =====================================
 
-function predictDrawing(
-    currentSKU
-){
+function predictDrawing(currentSKU){
 
     if(!currentSKU){
         return null;
     }
 
 
-    // =====================================================
-    // STEP 1
-    // EXACT ROOM + SKU
-    // =====================================================
+    // =====================================
+    // 1. EXACT ROOM + SKU
+    // =====================================
 
     const roomSkuKey =
         getRoomSKULearningKey(
@@ -294,22 +283,20 @@ function predictDrawing(
             currentSKU.item
         );
 
-    const roomSkuInfo =
-        drawingKnowledge
-            .roomSkuMap[
-                roomSkuKey
-            ];
+    const learned =
+        drawingKnowledge.roomSkuMap[
+            roomSkuKey
+        ];
 
-
-    if(roomSkuInfo){
+    if(learned){
 
         return {
 
             page:
-                roomSkuInfo.page,
+                learned.page,
 
             category:
-                roomSkuInfo.category,
+                learned.category,
 
             source:
                 "ROOM_SKU"
@@ -319,20 +306,19 @@ function predictDrawing(
     }
 
 
-    // =====================================================
-    // STEP 2
-    // OLD SKU LEARNING
-    // =====================================================
+    // =====================================
+    // 2. SKU FALLBACK
+    // =====================================
 
-    const key =
+    const skuKey =
         getLearningKey(
             currentSKU.item
         );
 
     const skuInfo =
-        drawingKnowledge
-            .skuMap[key];
-
+        drawingKnowledge.skuMap[
+            skuKey
+        ];
 
     if(skuInfo){
 
@@ -352,10 +338,9 @@ function predictDrawing(
     }
 
 
-    // =====================================================
-    // STEP 3
-    // OLD ROOM LEARNING
-    // =====================================================
+    // =====================================
+    // 3. ROOM FALLBACK
+    // =====================================
 
     const roomKey =
         getRoomLearningKey(
@@ -363,11 +348,9 @@ function predictDrawing(
         );
 
     const roomInfo =
-        drawingKnowledge
-            .roomPageMap[
-                roomKey
-            ];
-
+        drawingKnowledge.roomPageMap[
+            roomKey
+        ];
 
     if(roomInfo){
 

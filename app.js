@@ -105,17 +105,18 @@ async function loadQueueItem(index){
 
     currentQueueIndex = index;
 
-    currentSKU = validationQueue[index];
+    currentSKU =
+        validationQueue[index];
 
     renderCurrentSKU();
-    applyPrediction();
+
+    await applyPrediction();
 
     updateWindowTitle();
 
     updateQueueNavigator();
 
 }
-
 function openJumpModal(){
 
     const modal = document.getElementById("jumpModal");

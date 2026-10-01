@@ -325,18 +325,14 @@ async function applyPrediction(){
     }
 
 
-    // =====================================================
-    // EXISTING VALIDATION
-    // =====================================================
+    // =====================================
+    // ALREADY VALIDATED
+    // =====================================
 
     const saved =
         getValidation(
             currentSKU.id
         );
-
-
-    // If this SKU has already been validated,
-    // restore its saved page and do not run a new search.
 
     if(
         saved &&
@@ -348,20 +344,19 @@ async function applyPrediction(){
     }
 
 
-    // =====================================================
-    // STEP 1
-    // LEARNED ROOM + SKU
-    // =====================================================
+    // =====================================
+    // 1. PREVIOUSLY LEARNED ROOM + SKU
+    // =====================================
 
-    const learnedPrediction =
+    const learned =
         predictDrawing(
             currentSKU
         );
 
 
     if(
-        learnedPrediction &&
-        learnedPrediction.page
+        learned &&
+        learned.page
     ){
 
         document
@@ -369,7 +364,7 @@ async function applyPrediction(){
                 "drawingPage"
             )
             .value =
-                learnedPrediction.page;
+                learned.page;
 
 
         document
@@ -381,12 +376,12 @@ async function applyPrediction(){
 
 
         await goToPDFPage(
-            learnedPrediction.page
+            learned.page
         );
 
 
         showPredictionMessage(
-            learnedPrediction
+            learned
         );
 
 
@@ -395,17 +390,16 @@ async function applyPrediction(){
     }
 
 
-    // =====================================================
-    // STEP 2
-    // SEARCH ENTIRE GFC
-    // =====================================================
+    // =====================================
+    // 2. SEARCH ENTIRE GFC
+    // =====================================
 
     if(
         !isGFCPageIndexReady()
     ){
 
         console.log(
-            "GFC index not ready yet."
+            "GFC page index not ready."
         );
 
         return;
@@ -413,24 +407,16 @@ async function applyPrediction(){
     }
 
 
-    const searchResult =
+    const result =
         findBestGFCPage(
             currentSKU
         );
 
 
-    if(
-        !searchResult
-    ){
+    if(!result){
 
         showPredictionMessage(
             null
-        );
-
-        console.log(
-            "No GFC page match found for:",
-            currentSKU.room,
-            currentSKU.item
         );
 
         return;
@@ -438,16 +424,34 @@ async function applyPrediction(){
     }
 
 
-    // =====================================================
-    // OPEN BEST MATCH
-    // =====================================================
+    // =====================================
+    // LOW CONFIDENCE
+    // =====================================
+
+    if(
+        result.source ===
+        "LOW_CONFIDENCE"
+    ){
+
+        showPredictionMessage(
+            result
+        );
+
+        return;
+
+    }
+
+
+    // =====================================
+    // OPEN BEST PAGE
+    // =====================================
 
     document
         .getElementById(
             "drawingPage"
         )
         .value =
-            searchResult.page;
+            result.page;
 
 
     document
@@ -459,17 +463,17 @@ async function applyPrediction(){
 
 
     await goToPDFPage(
-        searchResult.page
+        result.page
     );
 
 
     showPredictionMessage(
-        searchResult
+        result
     );
 
 
     console.log(
-        "GFC PAGE SEARCH RESULT",
+        "GFC AUTO LOOKUP",
         {
             room:
                 currentSKU.room,
@@ -477,18 +481,23 @@ async function applyPrediction(){
             sku:
                 currentSKU.item,
 
-            bestPage:
-                searchResult.page,
+            page:
+                result.page,
 
             score:
-                searchResult.score,
+                result.score,
+
+            reasons:
+                result.reasons,
 
             candidates:
-                searchResult.candidates
+                result.candidates
         }
     );
 
 }
+
+
 function showPredictionMessage(
     prediction
 ){
@@ -507,7 +516,7 @@ function showPredictionMessage(
     if(!prediction){
 
         div.innerHTML =
-            "⚠ No matching GFC page found automatically.";
+            "⚠ No confident GFC page found.";
 
         return;
 
@@ -520,7 +529,7 @@ function showPredictionMessage(
     ){
 
         div.innerHTML =
-            "💡 Page learned from previous validation of this Room + SKU.";
+            "💡 Learned page for this Room + SKU.";
 
         return;
 
@@ -533,7 +542,7 @@ function showPredictionMessage(
     ){
 
         div.innerHTML =
-            "💡 Page suggested from previous validation of this SKU.";
+            "💡 Learned page for this SKU.";
 
         return;
 
@@ -546,7 +555,20 @@ function showPredictionMessage(
     ){
 
         div.innerHTML =
-            "💡 Page suggested from previous validation of this room.";
+            "💡 Suggested from this room.";
+
+        return;
+
+    }
+
+
+    if(
+        prediction.source ===
+        "LOW_CONFIDENCE"
+    ){
+
+        div.innerHTML =
+            `⚠ Low-confidence match. Candidate page: ${prediction.page}`;
 
         return;
 
@@ -559,9 +581,8 @@ function showPredictionMessage(
     ){
 
         div.innerHTML =
-            `🔎 GFC search suggestion: Page ${prediction.page}
-             &nbsp; | &nbsp;
-             Match score: ${prediction.score}/100`;
+            `🔎 GFC page suggested: ${prediction.page}
+             | Match score: ${prediction.score}`;
 
         return;
 

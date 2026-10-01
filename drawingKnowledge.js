@@ -1,6 +1,12 @@
 // =====================================
 // DRAWING KNOWLEDGE ENGINE
 // =====================================
+
+
+// =====================================
+// NORMALIZE SKU
+// =====================================
+
 function getLearningKey(item){
 
     if(!item){
@@ -8,24 +14,72 @@ function getLearningKey(item){
     }
 
     return item
-
         .replace(/\[.*?\]/g,"")
-
         .replace(/\s+/g," ")
-
         .trim()
-
         .toLowerCase();
 
 }
 
+
+// =====================================
+// NORMALIZE ROOM
+// =====================================
+
+function getRoomLearningKey(room){
+
+    if(!room){
+        return "";
+    }
+
+    return String(room)
+        .replace(/\s+/g," ")
+        .trim()
+        .toLowerCase();
+
+}
+
+
+// =====================================
+// ROOM + SKU KEY
+// =====================================
+
+function getRoomSKULearningKey(
+    room,
+    item
+){
+
+    const roomKey =
+        getRoomLearningKey(room);
+
+    const skuKey =
+        getLearningKey(item);
+
+    return (
+        roomKey +
+        "||" +
+        skuKey
+    );
+
+}
+
+
+// =====================================
+// KNOWLEDGE STORE
+// =====================================
+
 let drawingKnowledge = {
 
+    // NEW PRIMARY LEARNING
+    roomSkuMap:{},
+
+    // OLD LEARNING RETAINED
     skuMap:{},
 
     roomPageMap:{}
 
 };
+
 
 // =====================================
 // RESET
@@ -33,7 +87,9 @@ let drawingKnowledge = {
 
 function resetDrawingKnowledge(){
 
-    drawingKnowledge={
+    drawingKnowledge = {
+
+        roomSkuMap:{},
 
         skuMap:{},
 
@@ -41,7 +97,12 @@ function resetDrawingKnowledge(){
 
     };
 
+    console.log(
+        "Drawing Knowledge Reset"
+    );
+
 }
+
 
 // =====================================
 // GET
@@ -53,6 +114,7 @@ function getDrawingKnowledge(){
 
 }
 
+
 // =====================================
 // LEARN
 // =====================================
@@ -60,139 +122,270 @@ function getDrawingKnowledge(){
 function learnDrawing(record){
 
     if(!record){
-
         return;
-
     }
 
-    if(!record.categories){
-
+    if(
+        !record.drawingPage
+    ){
         return;
-
     }
 
-    if(record.categories.length===0){
 
+    const page =
+        Number(record.drawingPage);
+
+    if(
+        !page ||
+        page < 1
+    ){
         return;
-
     }
 
-    // Use first selected category
-    const category =
-        record.categories[0];
 
-    const config =
-        CHECKLIST_CONFIG[category];
+    // =====================================================
+    // PRIMARY LEARNING
+    // ROOM + SKU
+    // =====================================================
 
-    if(!config){
+    const roomSkuKey =
+        getRoomSKULearningKey(
+            record.room,
+            record.item
+        );
 
-        return;
-
-    }
-
-    const level =
-        config.drawingLevel;
-
-    if(level==="FULL_HOME"){
-
-        const key = getLearningKey(record.item);
-
-drawingKnowledge.skuMap[key] = {
-
-    page: Number(record.drawingPage),
-
-    category,
-
-    updatedOn: new Date().toISOString()
-
-};
-
-    }
-
-    else if(level==="ROOM"){
-
-        drawingKnowledge.roomPageMap[record.room]={
-
-            page:Number(record.drawingPage),
-
-            category
-
-        };
-
-    }
-
-    console.log(
-
-        "Drawing Knowledge",
+    if(roomSkuKey){
 
         drawingKnowledge
+            .roomSkuMap[roomSkuKey] = {
 
+                room:
+                    record.room,
+
+                item:
+                    record.item,
+
+                page:
+                    page,
+
+                category:
+                    record.categories &&
+                    record.categories.length
+                        ? record.categories[0]
+                        : "",
+
+                updatedOn:
+                    new Date().toISOString()
+
+            };
+
+    }
+
+
+    // =====================================================
+    // EXISTING FULL-HOME LEARNING
+    // =====================================================
+
+    if(
+        record.categories &&
+        record.categories.length
+    ){
+
+        const category =
+            record.categories[0];
+
+        const config =
+            CHECKLIST_CONFIG[category];
+
+        if(config){
+
+            const level =
+                config.drawingLevel;
+
+
+            if(
+                level === "FULL_HOME"
+            ){
+
+                const key =
+                    getLearningKey(
+                        record.item
+                    );
+
+                drawingKnowledge
+                    .skuMap[key] = {
+
+                        page:
+                            page,
+
+                        category:
+                            category,
+
+                        updatedOn:
+                            new Date().toISOString()
+
+                    };
+
+            }
+
+
+            // =================================================
+            // EXISTING ROOM LEARNING
+            // =================================================
+
+            else if(
+                level === "ROOM"
+            ){
+
+                const roomKey =
+                    getRoomLearningKey(
+                        record.room
+                    );
+
+                drawingKnowledge
+                    .roomPageMap[
+                        roomKey
+                    ] = {
+
+                        page:
+                            page,
+
+                        category:
+                            category
+
+                    };
+
+            }
+
+        }
+
+    }
+
+
+    console.log(
+        "Drawing Knowledge Updated",
+        drawingKnowledge
     );
 
 }
 
-// =====================================
-// PREDICT
-// =====================================
 
 // =====================================
 // PREDICT
 // =====================================
 
-function predictDrawing(currentSKU){
+function predictDrawing(
+    currentSKU
+){
 
     if(!currentSKU){
-
         return null;
+    }
+
+
+    // =====================================================
+    // STEP 1
+    // EXACT ROOM + SKU
+    // =====================================================
+
+    const roomSkuKey =
+        getRoomSKULearningKey(
+            currentSKU.room,
+            currentSKU.item
+        );
+
+    const roomSkuInfo =
+        drawingKnowledge
+            .roomSkuMap[
+                roomSkuKey
+            ];
+
+
+    if(roomSkuInfo){
+
+        return {
+
+            page:
+                roomSkuInfo.page,
+
+            category:
+                roomSkuInfo.category,
+
+            source:
+                "ROOM_SKU"
+
+        };
 
     }
 
-    // -----------------------------
-    // STEP 1 : Already learnt SKU ?
-    // -----------------------------
 
-const key = getLearningKey(currentSKU.item);
+    // =====================================================
+    // STEP 2
+    // OLD SKU LEARNING
+    // =====================================================
 
-const skuInfo =
-    drawingKnowledge.skuMap[key];
+    const key =
+        getLearningKey(
+            currentSKU.item
+        );
+
+    const skuInfo =
+        drawingKnowledge
+            .skuMap[key];
+
 
     if(skuInfo){
 
-        return{
+        return {
 
-            page: skuInfo.page,
+            page:
+                skuInfo.page,
 
-            category: skuInfo.category,
+            category:
+                skuInfo.category,
 
-            source: "SKU"
+            source:
+                "SKU"
 
         };
 
     }
 
-    // -----------------------------
-    // STEP 2 : Room prediction
-    // -----------------------------
+
+    // =====================================================
+    // STEP 3
+    // OLD ROOM LEARNING
+    // =====================================================
+
+    const roomKey =
+        getRoomLearningKey(
+            currentSKU.room
+        );
 
     const roomInfo =
+        drawingKnowledge
+            .roomPageMap[
+                roomKey
+            ];
 
-        drawingKnowledge.roomPageMap[
-            currentSKU.room
-        ];
 
     if(roomInfo){
 
-        return{
+        return {
 
-            page: roomInfo.page,
+            page:
+                roomInfo.page,
 
-            category: null,
+            category:
+                null,
 
-            source: "ROOM"
+            source:
+                "ROOM"
 
         };
 
     }
+
 
     return null;
 

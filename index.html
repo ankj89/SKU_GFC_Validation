@@ -355,15 +355,18 @@
 
         <div class="drawing-info-grid">
 
-            <div>
+           <div>
+    <label>Drawing Page</label>
 
-                <label>Drawing Page</label>
+    <input
+        id="drawingPage"
+        type="number">
 
-                <input
-                    id="drawingPage"
-                    type="number">
-
-            </div>
+    <div
+        id="predictionMessage"
+        class="prediction-message">
+    </div>
+</div>
 
             <div>
 
@@ -498,12 +501,18 @@
 <script src="projectFetcher.js"></script>
 <script src="projectMasterBuilder.js"></script>
 
-<script src="pdfViewer.js"></script>
-
 <script src="checklistEngine.js"></script>
 
 <script src="validationStore.js"></script>
+
 <script src="drawingKnowledge.js"></script>
+
+<script src="gfcPageIndexer.js"></script>
+
+<script src="gfcPageLookup.js"></script>
+
+<script src="pdfViewer.js"></script>
+
 <script src="reportGenerator.js"></script>
 
 <script src="excelExport.js"></script>

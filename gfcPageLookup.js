@@ -1,11 +1,5 @@
 // ============================================================
 // GFC PAGE LOOKUP ENGINE
-// Phase 1
-//
-// Room + SKU -> best GFC page
-//
-// This does NOT try to understand the drawing.
-// It only identifies the most likely page.
 // ============================================================
 
 
@@ -13,16 +7,16 @@
 // NORMALIZATION
 // ============================================================
 
-function normalizeLookupText(text) {
+function normalizeLookupText(text){
 
-    if (!text) {
+    if(!text){
         return "";
     }
 
     return String(text)
-        .replace(/\[.*?\]/g, "")
-        .replace(/[^a-zA-Z0-9]+/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(/\[.*?\]/g,"")
+        .replace(/[^a-zA-Z0-9]+/g," ")
+        .replace(/\s+/g," ")
         .trim()
         .toLowerCase();
 
@@ -30,433 +24,754 @@ function normalizeLookupText(text) {
 
 
 // ============================================================
-// STOP WORDS
+// ROOM NORMALIZATION
 // ============================================================
 
-const GFC_LOOKUP_STOP_WORDS = new Set([
+function normalizeLookupRoom(room){
 
-    "the",
-    "and",
-    "with",
-    "for",
-    "only",
-    "new",
-    "item",
-    "work",
-    "works",
-    "complete",
-    "providing",
-    "provide",
-    "supply",
-    "installation",
-    "install",
-    "as",
-    "per",
-    "specification",
-    "specifications",
-    "standard"
+    if(!room){
+        return "";
+    }
 
-]);
+    let value =
+        normalizeLookupText(room);
 
 
-// ============================================================
-// TOKENIZE
-// ============================================================
+    // bedroom-02 → bedroom 2
+    value =
+        value.replace(
+            /\bbedroom\s*0*(\d+)\b/g,
+            "bedroom $1"
+        );
 
-function getLookupTokens(text) {
 
-    return normalizeLookupText(text)
+    // bed-02 → bedroom 2
+    value =
+        value.replace(
+            /\bbed\s*0*(\d+)\b/g,
+            "bedroom $1"
+        );
 
-        .split(" ")
 
-        .filter(token => {
-
-            if (!token) {
-                return false;
-            }
-
-            if (token.length < 2) {
-                return false;
-            }
-
-            if (
-                GFC_LOOKUP_STOP_WORDS
-                    .has(token)
-            ) {
-                return false;
-            }
-
-            return true;
-
-        });
+    return value
+        .replace(/\s+/g," ")
+        .trim();
 
 }
 
 
 // ============================================================
-// ROOM ALIASES
+// ROOM TERMS
 // ============================================================
 
-function getRoomSearchTerms(room) {
+function getRoomTerms(room){
 
-    if (!room) {
+    const normalized =
+        normalizeLookupRoom(room);
+
+    const terms =
+        new Set();
+
+    if(!normalized){
         return [];
     }
 
-    const normalized =
-        normalizeLookupText(room);
+    terms.add(normalized);
 
-    const terms = new Set();
 
-    if (normalized) {
-        terms.add(normalized);
+    const bedroomMatch =
+        normalized.match(
+            /^bedroom\s+(\d+)$/
+        );
+
+    if(bedroomMatch){
+
+        const number =
+            bedroomMatch[1];
+
+        terms.add(
+            `bedroom ${number}`
+        );
+
+        terms.add(
+            `bed ${number}`
+        );
+
+        terms.add(
+            `bedroom 0${number}`
+        );
+
     }
 
-    // Common room variations
 
-    const aliases = {
+    if(
+        normalized ===
+        "master bedroom"
+    ){
 
-        "master bedroom": [
-            "master bedroom",
-            "master bed",
-            "m bedroom",
-            "mbr"
-        ],
+        terms.add("master bedroom");
+        terms.add("master bed");
+        terms.add("m bedroom");
+        terms.add("mbr");
 
-        "bedroom": [
-            "bedroom",
-            "bed"
-        ],
+    }
 
-        "bedroom 1": [
-            "bedroom 1",
-            "bed 1",
-            "bedroom one",
-            "bed 01",
-            "bed-1"
-        ],
 
-        "bedroom 2": [
-            "bedroom 2",
-            "bed 2",
-            "bedroom two",
-            "bed 02",
-            "bed-2"
-        ],
+    if(
+        normalized ===
+        "living room"
+    ){
 
-        "bedroom 3": [
-            "bedroom 3",
-            "bed 3",
-            "bedroom three",
-            "bed 03",
-            "bed-3"
-        ],
+        terms.add("living room");
+        terms.add("living");
 
-        "living room": [
-            "living room",
-            "living",
-            "lounge"
-        ],
+    }
 
-        "dining room": [
-            "dining room",
-            "dining"
-        ],
 
-        "kitchen": [
-            "kitchen",
-            "modular kitchen"
-        ],
+    if(
+        normalized ===
+        "dining room"
+    ){
 
-        "utility": [
-            "utility",
-            "utility area"
-        ],
+        terms.add("dining room");
+        terms.add("dining");
 
-        "balcony": [
-            "balcony"
-        ],
+    }
 
-        "toilet": [
-            "toilet",
-            "bathroom",
-            "washroom"
-        ]
+
+    if(
+        normalized ===
+        "toilet"
+    ){
+
+        terms.add("toilet");
+        terms.add("bathroom");
+        terms.add("washroom");
+
+    }
+
+
+    return Array.from(terms);
+
+}
+
+
+// ============================================================
+// SKU TERMS
+// ============================================================
+
+function getSKUTerms(item,description){
+
+    const itemText =
+        normalizeLookupText(item);
+
+    const descriptionText =
+        normalizeLookupText(description);
+
+
+    const result = {
+
+        exactSKU:
+            itemText,
+
+        exactDescription:
+            descriptionText,
+
+        skuTokens:
+            itemText
+                .split(" ")
+                .filter(x => x.length >= 2),
+
+        descriptionTokens:
+            descriptionText
+                .split(" ")
+                .filter(x => x.length >= 2)
 
     };
 
-    Object.keys(aliases)
-        .forEach(key => {
+    return result;
 
-            if (
-                normalized === key ||
-                normalized.includes(key)
-            ) {
+}
 
-                aliases[key]
-                    .forEach(alias =>
-                        terms.add(alias)
-                    );
+
+// ============================================================
+// DRAWING TYPE DETECTION
+// ============================================================
+
+function detectDrawingTypes(text){
+
+    const types = [];
+
+    const t =
+        normalizeLookupText(text);
+
+
+    if(
+        t.includes("interior elevation") ||
+        t.includes("wall elevation")
+    ){
+
+        types.push(
+            "INTERIOR_ELEVATION"
+        );
+
+    }
+
+
+    if(
+        t.includes("floor plan") ||
+        t.includes("furniture plan")
+    ){
+
+        types.push(
+            "FLOOR_PLAN"
+        );
+
+    }
+
+
+    if(
+        t.includes("ceiling plan") ||
+        t.includes("false ceiling plan")
+    ){
+
+        types.push(
+            "CEILING_PLAN"
+        );
+
+    }
+
+
+    if(
+        t.includes("electrical plan") ||
+        t.includes("electrical layout")
+    ){
+
+        types.push(
+            "ELECTRICAL_PLAN"
+        );
+
+    }
+
+
+    if(
+        t.includes("section")
+    ){
+
+        types.push(
+            "SECTION"
+        );
+
+    }
+
+
+    if(
+        t.includes("detail")
+    ){
+
+        types.push(
+            "DETAIL"
+        );
+
+    }
+
+
+    return types;
+
+}
+
+
+// ============================================================
+// DETECT ROOMS ON PAGE
+// ============================================================
+
+function detectRoomsOnPage(text){
+
+    const normalized =
+        normalizeLookupText(text);
+
+    const rooms = new Set();
+
+
+    // Bedroom 1 / Bedroom-01 / Bedroom 01
+    const bedroomMatches =
+        normalized.matchAll(
+            /\bbedroom\s*0*(\d+)\b/g
+        );
+
+    for(
+        const match of bedroomMatches
+    ){
+
+        rooms.add(
+            `bedroom ${Number(match[1])}`
+        );
+
+    }
+
+
+    // Master bedroom
+    if(
+        normalized.includes(
+            "master bedroom"
+        )
+    ){
+
+        rooms.add(
+            "master bedroom"
+        );
+
+    }
+
+
+    if(
+        normalized.includes("living room") ||
+        /\bliving\b/.test(normalized)
+    ){
+
+        rooms.add(
+            "living room"
+        );
+
+    }
+
+
+    if(
+        normalized.includes("dining room") ||
+        /\bdining\b/.test(normalized)
+    ){
+
+        rooms.add(
+            "dining room"
+        );
+
+    }
+
+
+    if(
+        normalized.includes("kitchen")
+    ){
+
+        rooms.add(
+            "kitchen"
+        );
+
+    }
+
+
+    if(
+        normalized.includes("utility")
+    ){
+
+        rooms.add(
+            "utility"
+        );
+
+    }
+
+
+    return Array.from(rooms);
+
+}
+
+
+// ============================================================
+// ROOM MATCH
+// ============================================================
+
+function evaluateRoomMatch(
+    page,
+    currentRoom
+){
+
+    const pageText =
+        page.normalizedText || "";
+
+    const targetRoom =
+        normalizeLookupRoom(
+            currentRoom
+        );
+
+    const pageRooms =
+        detectRoomsOnPage(
+            pageText
+        );
+
+
+    const roomTerms =
+        getRoomTerms(
+            currentRoom
+        );
+
+
+    let exact =
+        false;
+
+    let weak =
+        false;
+
+    let conflict =
+        false;
+
+
+    // Exact room detected
+
+    for(
+        const room of pageRooms
+    ){
+
+        if(
+            room === targetRoom
+        ){
+
+            exact = true;
+
+        }
+
+    }
+
+
+    // Search aliases
+
+    if(!exact){
+
+        for(
+            const term of roomTerms
+        ){
+
+            if(
+                pageText.includes(
+                    term
+                )
+            ){
+
+                weak = true;
+
+                break;
 
             }
 
-        });
-
-    return Array.from(terms);
-
-}
-
-
-// ============================================================
-// SKU SEARCH TERMS
-// ============================================================
-
-function getSKUSearchTerms(item, description) {
-
-    const terms = new Set();
-
-    const source = [
-
-        item || "",
-
-        description || ""
-
-    ].join(" ");
-
-    const normalized =
-        normalizeLookupText(source);
-
-    if (normalized) {
-
-        terms.add(normalized);
+        }
 
     }
 
-    getLookupTokens(source)
-        .forEach(token =>
-            terms.add(token)
-        );
 
-    return Array.from(terms);
+    // If page is explicitly room-specific
+    // to another bedroom, reject it.
 
-}
+    if(
+        pageRooms.length === 1 &&
+        !exact
+    ){
 
+        conflict = true;
 
-// ============================================================
-// PHRASE MATCH
-// ============================================================
-
-function containsPhrase(text, phrase) {
-
-    if (!text || !phrase) {
-        return false;
     }
 
-    return text.includes(
-        normalizeLookupText(phrase)
-    );
+
+    return {
+
+        exact,
+        weak,
+        conflict,
+        pageRooms
+
+    };
 
 }
 
 
 // ============================================================
-// PAGE SCORING
+// SCORE PAGE
 // ============================================================
 
 function scoreGFCPage(
     page,
     currentSKU
-) {
+){
 
-    if (!page || !currentSKU) {
+    if(
+        !page ||
+        !currentSKU
+    ){
+
         return null;
+
     }
 
-    const room =
-        currentSKU.room || "";
 
-    const item =
-        currentSKU.item || "";
-
-    const description =
-        currentSKU.description || "";
-
-    const pageText =
+    const text =
         page.normalizedText || "";
 
-    if (!pageText) {
+
+    if(!text){
         return null;
     }
+
+
+    const roomResult =
+        evaluateRoomMatch(
+            page,
+            currentSKU.room
+        );
+
+
+    const sku =
+        getSKUTerms(
+            currentSKU.item,
+            currentSKU.description
+        );
 
 
     let score = 0;
 
-    let roomMatches = [];
-
-    let skuMatches = [];
+    const reasons = [];
 
 
     // ========================================================
-    // ROOM MATCHING
+    // ROOM
     // ========================================================
 
-    const roomTerms =
-        getRoomSearchTerms(room);
-
-    roomTerms.forEach(term => {
-
-        if (
-            containsPhrase(
-                pageText,
-                term
-            )
-        ) {
-
-            roomMatches.push(term);
-
-            // Exact room phrase gets more weight
-
-            if (
-                normalizeLookupText(room)
-                ===
-                normalizeLookupText(term)
-            ) {
-
-                score += 35;
-
-            }
-
-            else {
-
-                score += 20;
-
-            }
-
-        }
-
-    });
-
-
-    // ========================================================
-    // SKU / DESCRIPTION MATCHING
-    // ========================================================
-
-    const skuTerms =
-        getSKUSearchTerms(
-            item,
-            description
-        );
-
-    // Exact SKU phrase
-
-    const normalizedSKU =
-        normalizeLookupText(item);
-
-    if (
-        normalizedSKU &&
-        containsPhrase(
-            pageText,
-            normalizedSKU
-        )
-    ) {
-
-        score += 60;
-
-        skuMatches.push(
-            normalizedSKU
-        );
-
-    }
-
-
-    // Description phrase
-
-    const normalizedDescription =
-        normalizeLookupText(
-            description
-        );
-
-    if (
-        normalizedDescription &&
-        normalizedDescription.length > 5 &&
-        containsPhrase(
-            pageText,
-            normalizedDescription
-        )
-    ) {
+    if(roomResult.exact){
 
         score += 35;
 
-        skuMatches.push(
-            normalizedDescription
+        reasons.push(
+            "Exact room"
+        );
+
+    }
+    else if(roomResult.weak){
+
+        score += 10;
+
+        reasons.push(
+            "Weak room match"
         );
 
     }
 
 
-    // Individual meaningful tokens
+    // ========================================================
+    // WRONG ROOM
+    // ========================================================
 
-    const uniqueTokens =
-        new Set(
-            getLookupTokens(
-                item + " " + description
-            )
+    if(roomResult.conflict){
+
+        score -= 100;
+
+        reasons.push(
+            "Different room"
         );
 
-    uniqueTokens.forEach(token => {
+    }
 
-        if (
-            pageText.includes(token)
-        ) {
 
-            // Don't overinflate score
+    // ========================================================
+    // EXACT SKU
+    // ========================================================
 
-            score += 4;
+    if(
+        sku.exactSKU &&
+        text.includes(
+            sku.exactSKU
+        )
+    ){
 
-            skuMatches.push(token);
+        score += 70;
+
+        reasons.push(
+            "Exact SKU"
+        );
+
+    }
+
+
+    // ========================================================
+    // SKU TOKEN MATCH
+    // ========================================================
+
+    let skuTokenHits = 0;
+
+    sku.skuTokens.forEach(token => {
+
+        if(
+            text.includes(token)
+        ){
+
+            skuTokenHits++;
 
         }
 
     });
 
 
-    // ========================================================
-    // ROOM + SKU COMBINATION BONUS
-    // ========================================================
+    if(skuTokenHits){
 
-    if (
-        roomMatches.length > 0 &&
-        skuMatches.length > 0
-    ) {
+        score +=
+            Math.min(
+                skuTokenHits * 6,
+                24
+            );
 
-        score += 30;
+        reasons.push(
+            `${skuTokenHits} SKU token match`
+        );
 
     }
 
 
     // ========================================================
-    // CAP SCORE
+    // DESCRIPTION MATCH
     // ========================================================
 
-    score =
-        Math.min(score, 100);
+    let descriptionHits = 0;
 
+    sku.descriptionTokens
+        .forEach(token => {
+
+            if(
+                token.length >= 3 &&
+                text.includes(token)
+            ){
+
+                descriptionHits++;
+
+            }
+
+        });
+
+
+    if(descriptionHits){
+
+        score +=
+            Math.min(
+                descriptionHits * 3,
+                18
+            );
+
+        reasons.push(
+            `${descriptionHits} description match`
+        );
+
+    }
+
+
+    // ========================================================
+    // DRAWING TYPE
+    // ========================================================
+
+    const drawingTypes =
+        detectDrawingTypes(
+            page.text
+        );
+
+
+    if(
+        drawingTypes.includes(
+            "INTERIOR_ELEVATION"
+        )
+    ){
+
+        // Interior elevation is especially useful
+        // when room is explicitly identified.
+
+        if(roomResult.exact){
+
+            score += 25;
+
+            reasons.push(
+                "Room interior elevation"
+            );
+
+        }
+
+    }
+
+
+    if(
+        drawingTypes.includes(
+            "CEILING_PLAN"
+        )
+    ){
+
+        score += 8;
+
+        reasons.push(
+            "Ceiling plan"
+        );
+
+    }
+
+
+    if(
+        drawingTypes.includes(
+            "ELECTRICAL_PLAN"
+        )
+    ){
+
+        score += 8;
+
+        reasons.push(
+            "Electrical plan"
+        );
+
+    }
+
+
+    // ========================================================
+    // ROOM + EXACT SKU BONUS
+    // ========================================================
+
+    if(
+        roomResult.exact &&
+        sku.exactSKU &&
+        text.includes(
+            sku.exactSKU
+        )
+    ){
+
+        score += 35;
+
+        reasons.push(
+            "Room + exact SKU"
+        );
+
+    }
+
+
+    // ========================================================
+    // FINAL
+    // ========================================================
 
     return {
 
-        page: page.page,
+        page:
+            page.page,
 
-        score: score,
+        score:
+            Math.max(
+                0,
+                Math.min(
+                    score,
+                    200
+                )
+            ),
 
-        roomMatches:
-            [...new Set(roomMatches)],
+        room:
+            roomResult,
 
-        skuMatches:
-            [...new Set(skuMatches)],
+        drawingTypes:
+            drawingTypes,
+
+        reasons:
+            reasons,
 
         preview:
-            page.text
-                .substring(0, 300)
+            page.text.substring(
+                0,
+                500
+            )
 
     };
 
@@ -464,53 +779,52 @@ function scoreGFCPage(
 
 
 // ============================================================
-// SEARCH ENTIRE GFC
+// SEARCH
 // ============================================================
 
 function searchGFCForSKU(
     currentSKU
-) {
+){
 
-    if (!currentSKU) {
-        return [];
-    }
-
-    if (!gfcIndexReady) {
-
-        console.warn(
-            "GFC page index is not ready."
-        );
+    if(
+        !currentSKU ||
+        !isGFCPageIndexReady()
+    ){
 
         return [];
 
     }
+
 
     const results = [];
 
-    gfcPageIndex.forEach(page => {
 
-        const result =
-            scoreGFCPage(
-                page,
-                currentSKU
-            );
+    getGFCPageIndex()
+        .forEach(page => {
 
-        if (
-            result &&
-            result.score > 0
-        ) {
-
-            results.push(result);
-
-        }
-
-    });
+            const result =
+                scoreGFCPage(
+                    page,
+                    currentSKU
+                );
 
 
-    // Highest score first
+            if(
+                result &&
+                result.score > 0
+            ){
+
+                results.push(
+                    result
+                );
+
+            }
+
+        });
+
 
     results.sort(
-        (a, b) =>
+        (a,b) =>
             b.score - a.score
     );
 
@@ -521,30 +835,53 @@ function searchGFCForSKU(
 
 
 // ============================================================
-// GET BEST MATCH
+// BEST MATCH
 // ============================================================
 
 function findBestGFCPage(
     currentSKU
-) {
+){
 
     const results =
         searchGFCForSKU(
             currentSKU
         );
 
-    if (!results.length) {
 
+    if(!results.length){
         return null;
+    }
+
+
+    // Do not automatically trust a weak match.
+
+    const best =
+        results[0];
+
+
+    if(best.score < 35){
+
+        return {
+
+            ...best,
+
+            candidates:
+                results.slice(0,10),
+
+            source:
+                "LOW_CONFIDENCE"
+
+        };
 
     }
 
+
     return {
 
-        ...results[0],
+        ...best,
 
         candidates:
-            results.slice(0, 10),
+            results.slice(0,10),
 
         source:
             "SEARCH"
@@ -555,7 +892,7 @@ function findBestGFCPage(
 
 
 // ============================================================
-// PUBLIC DEBUG
+// DEBUG
 // ============================================================
 
 window.searchGFCForSKU =

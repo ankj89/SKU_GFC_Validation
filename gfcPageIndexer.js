@@ -1,7 +1,5 @@
 // ============================================================
 // GFC PAGE INDEXER
-// Phase 1
-// Extracts searchable text from every GFC PDF page
 // ============================================================
 
 let gfcPageIndex = [];
@@ -12,15 +10,15 @@ let gfcIndexReady = false;
 // NORMALIZE TEXT
 // ============================================================
 
-function normalizeGFCText(text) {
+function normalizeGFCText(text){
 
-    if (!text) {
+    if(!text){
         return "";
     }
 
     return String(text)
-        .replace(/\s+/g, " ")
-        .replace(/[|]+/g, " ")
+        .replace(/\s+/g," ")
+        .replace(/[|]+/g," ")
         .trim()
         .toLowerCase();
 
@@ -28,34 +26,21 @@ function normalizeGFCText(text) {
 
 
 // ============================================================
-// NORMALIZE SEARCH TERM
+// NORMALIZE SEARCH TEXT
 // ============================================================
 
-function normalizeGFCTerm(text) {
+function normalizeGFCTerm(text){
 
-    if (!text) {
+    if(!text){
         return "";
     }
 
     return String(text)
-        .replace(/\[.*?\]/g, "")
-        .replace(/[^a-zA-Z0-9]+/g, " ")
-        .replace(/\s+/g, " ")
+        .replace(/\[.*?\]/g,"")
+        .replace(/[^a-zA-Z0-9]+/g," ")
+        .replace(/\s+/g," ")
         .trim()
         .toLowerCase();
-
-}
-
-
-// ============================================================
-// TOKENIZE
-// ============================================================
-
-function tokenizeGFCText(text) {
-
-    return normalizeGFCTerm(text)
-        .split(" ")
-        .filter(x => x.length >= 2);
 
 }
 
@@ -64,102 +49,101 @@ function tokenizeGFCText(text) {
 // BUILD INDEX
 // ============================================================
 
-async function buildGFCPageIndex(pdfDocument) {
+async function buildGFCPageIndex(pdf){
 
     gfcPageIndex = [];
     gfcIndexReady = false;
 
-    if (!pdfDocument) {
+    if(!pdf){
         return;
     }
 
     console.log(
-        "Building GFC page index..."
+        "Building GFC Page Index..."
     );
 
-    for (
+    for(
         let pageNo = 1;
-        pageNo <= pdfDocument.numPages;
+        pageNo <= pdf.numPages;
         pageNo++
-    ) {
+    ){
 
-        try {
+        try{
 
             const page =
-                await pdfDocument.getPage(pageNo);
+                await pdf.getPage(pageNo);
 
-            const textContent =
+            const content =
                 await page.getTextContent();
 
             const items =
-                textContent.items || [];
+                content.items || [];
 
             const text =
                 items
-                    .map(item => item.str || "")
+                    .map(x => x.str || "")
                     .join(" ");
-
-            const normalizedText =
-                normalizeGFCText(text);
-
-            const tokens =
-                tokenizeGFCText(text);
 
             gfcPageIndex.push({
 
-                page: pageNo,
+                page:
+                    pageNo,
 
-                text: text,
+                text:
+                    text,
 
-                normalizedText: normalizedText,
+                normalizedText:
+                    normalizeGFCText(text),
 
-                tokens: tokens,
+                textItems:
+                    items.map(x => ({
 
-                textItems: items.map(item => ({
+                        text:
+                            x.str || "",
 
-                    text: item.str || "",
+                        x:
+                            x.transform
+                                ? x.transform[4]
+                                : 0,
 
-                    x:
-                        item.transform
-                            ? item.transform[4]
-                            : 0,
+                        y:
+                            x.transform
+                                ? x.transform[5]
+                                : 0,
 
-                    y:
-                        item.transform
-                            ? item.transform[5]
-                            : 0,
+                        width:
+                            x.width || 0,
 
-                    width:
-                        item.width || 0,
+                        height:
+                            x.height || 0
 
-                    height:
-                        item.height || 0
-
-                }))
+                    }))
 
             });
 
         }
 
-        catch(error) {
+        catch(error){
 
             console.error(
-                "Failed to index GFC page",
+                "GFC indexing failed on page",
                 pageNo,
                 error
             );
 
             gfcPageIndex.push({
 
-                page: pageNo,
+                page:
+                    pageNo,
 
-                text: "",
+                text:
+                    "",
 
-                normalizedText: "",
+                normalizedText:
+                    "",
 
-                tokens: [],
-
-                textItems: []
+                textItems:
+                    []
 
             });
 
@@ -170,26 +154,21 @@ async function buildGFCPageIndex(pdfDocument) {
     gfcIndexReady = true;
 
     console.log(
-        "GFC page index ready:",
-        gfcPageIndex.length,
-        "pages"
+        "GFC Page Index Ready:",
+        gfcPageIndex.length
     );
 
 }
 
 
-// ============================================================
-// ACCESSORS
-// ============================================================
-
-function isGFCPageIndexReady() {
+function isGFCPageIndexReady(){
 
     return gfcIndexReady;
 
 }
 
 
-function getGFCPageIndex() {
+function getGFCPageIndex(){
 
     return gfcPageIndex;
 
